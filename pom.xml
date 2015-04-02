@@ -30,6 +30,21 @@
             <artifactId>signpost-core</artifactId>
             <version>1.2.1.2</version>
         </dependency>
+        <dependency>
+            <groupId>oauth.signpost</groupId>
+            <artifactId>signpost-commonshttp4</artifactId>
+            <version>1.2.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.4.1</version>
+        </dependency>
     </dependencies>
 
     <build>

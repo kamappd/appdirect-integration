@@ -2,6 +2,7 @@ package com.appdirect.integration.configuration;
 
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.basic.DefaultOAuthConsumer;
+import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,6 @@ public class OAuthConsumerConfiguration {
 
     @Bean
     public OAuthConsumer oAuthConsumer() {
-        return new DefaultOAuthConsumer(oauthConsumerKey, oauthConsumerSecret);
+        return new CommonsHttpOAuthConsumer(oauthConsumerKey, oauthConsumerSecret);
     }
 }

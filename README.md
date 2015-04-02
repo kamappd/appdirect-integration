@@ -3,6 +3,7 @@
 mvn clean package
 foreman start web
 ```
+http://localhost:5000
 
 # Deploy to heroku
 ```
