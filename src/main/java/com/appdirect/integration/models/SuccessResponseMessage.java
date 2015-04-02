@@ -6,6 +6,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import static javax.xml.bind.annotation.XmlAccessType.FIELD;
 
+@XmlRootElement(name = "result")
+@XmlAccessorType(FIELD)
 public class SuccessResponseMessage extends ResponseMessage {
     @XmlElement
     private String message;
