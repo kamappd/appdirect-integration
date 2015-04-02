@@ -1,11 +1,13 @@
 package com.appdirect.integration.controllers;
 
 import com.appdirect.integration.exceptions.SubscriptionOrderEventException;
-import com.appdirect.integration.services.EventDataRetrieverService;
 import com.appdirect.integration.models.ErrorResponseMessage;
+import com.appdirect.integration.models.ResponseMessage;
 import com.appdirect.integration.models.SuccessResponseMessage;
 import com.appdirect.integration.models.events.CancelSubscriptionOrderEvent;
+import com.appdirect.integration.models.events.ChangeSubscriptionOrderEvent;
 import com.appdirect.integration.models.events.CreateSubscriptionOrderEvent;
+import com.appdirect.integration.services.EventDataRetrieverService;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
@@ -40,11 +42,24 @@ public class SubscriptionController {
 
     @RequestMapping(value = "/create", method = GET, produces = APPLICATION_XML_VALUE)
     @ResponseBody
-    public SuccessResponseMessage handleCreateSubscriptionOrderEvent(@RequestParam("url") String url) throws IOException, JAXBException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthMessageSignerException {
+    public ResponseMessage handleCreateSubscriptionOrderEvent(@RequestParam("url") String url) throws IOException, JAXBException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthMessageSignerException {
         CreateSubscriptionOrderEvent eventData = eventDataRetrieverService.getEventData(url, CreateSubscriptionOrderEvent.class);
 
         if (eventData == null) {
-            throw new SubscriptionOrderEventException(new ErrorResponseMessage(ACCOUNT_NOT_FOUND, "toto"));
+            new ErrorResponseMessage(ACCOUNT_NOT_FOUND, "toto");
+        }
+
+        logger.info("{}", eventData);
+        return new SuccessResponseMessage("toto", "1234");
+    }
+
+    @RequestMapping(value = "/change", method = GET, produces = APPLICATION_XML_VALUE)
+    @ResponseBody
+    public ResponseMessage handleChangeSubscriptionOrderEvent(@RequestParam("url") String url) throws IOException, JAXBException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthMessageSignerException {
+        ChangeSubscriptionOrderEvent eventData = eventDataRetrieverService.getEventData(url, ChangeSubscriptionOrderEvent.class);
+
+        if (eventData == null) {
+            new ErrorResponseMessage(ACCOUNT_NOT_FOUND, "toto");
         }
 
         logger.info("{}", eventData);
@@ -53,11 +68,11 @@ public class SubscriptionController {
 
     @RequestMapping(value = "/cancel", method = GET, produces = APPLICATION_XML_VALUE)
     @ResponseBody
-    public SuccessResponseMessage handleCancelSubscriptionOrderEvent(@RequestParam("url") String url) throws IOException, JAXBException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthMessageSignerException {
+    public ResponseMessage handleCancelSubscriptionOrderEvent(@RequestParam("url") String url) throws IOException, JAXBException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthMessageSignerException {
         CancelSubscriptionOrderEvent eventData = eventDataRetrieverService.getEventData(url, CancelSubscriptionOrderEvent.class);
 
         if (eventData == null) {
-            throw new SubscriptionOrderEventException(new ErrorResponseMessage(ACCOUNT_NOT_FOUND, "toto"));
+            new ErrorResponseMessage(ACCOUNT_NOT_FOUND, "toto");
         }
 
         logger.info("{}", eventData);
