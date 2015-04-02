@@ -9,8 +9,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import static javax.xml.bind.annotation.XmlAccessType.FIELD;
 
-@XmlRootElement(name = "event")
-@XmlAccessorType(FIELD)
 public abstract class Event<T> {
     @XmlElement
     private EventType type;
