@@ -1,6 +1,7 @@
 package com.appdirect.integration.utils;
 
 import com.appdirect.integration.models.events.CancelSubscriptionOrderEvent;
+import com.appdirect.integration.models.events.ChangeSubscriptionOrderEvent;
 import com.appdirect.integration.models.events.CreateSubscriptionOrderEvent;
 import org.junit.Test;
 
@@ -26,11 +27,11 @@ public class EventParserTest {
     @Test
     public void can_parse_change_subscription_order_event() throws Exception {
 
-        ByteArrayInputStream input = aCancelSubscriptionOrderEventInputStream();
+        ByteArrayInputStream input = aChangeSubscriptionOrderEventInputStream();
 
-        CancelSubscriptionOrderEvent createSubscriptionOrderEvent = eventParser.parse(input, CancelSubscriptionOrderEvent.class);
+        ChangeSubscriptionOrderEvent changeSubscriptionOrderEvent = eventParser.parse(input, ChangeSubscriptionOrderEvent.class);
 
-        assertThat(createSubscriptionOrderEvent, notNullValue());
+        assertThat(changeSubscriptionOrderEvent, notNullValue());
     }
 
     @Test
@@ -38,9 +39,9 @@ public class EventParserTest {
 
         ByteArrayInputStream input = aCancelSubscriptionOrderEventInputStream();
 
-        CancelSubscriptionOrderEvent createSubscriptionOrderEvent = eventParser.parse(input, CancelSubscriptionOrderEvent.class);
+        CancelSubscriptionOrderEvent cancelSubscriptionOrderEvent = eventParser.parse(input, CancelSubscriptionOrderEvent.class);
 
-        assertThat(createSubscriptionOrderEvent, notNullValue());
+        assertThat(cancelSubscriptionOrderEvent, notNullValue());
     }
 
     private ByteArrayInputStream aCreateSubscriptionOrderEventInputStream() {

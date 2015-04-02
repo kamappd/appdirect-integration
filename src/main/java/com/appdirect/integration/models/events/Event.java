@@ -12,15 +12,12 @@ import static javax.xml.bind.annotation.XmlAccessType.FIELD;
 
 @XmlTransient
 public abstract class Event<T> {
-    @XmlElement
     private EventType type;
-    @XmlElement
     private MarketPlace marketplace;
-    @XmlElement
     private Contact creator;
-    @XmlElement
     private T payload;
 
+    @XmlElement
     public EventType getType() {
         return type;
     }
@@ -29,6 +26,7 @@ public abstract class Event<T> {
         this.type = type;
     }
 
+    @XmlElement
     public MarketPlace getMarketplace() {
         return marketplace;
     }
@@ -37,6 +35,7 @@ public abstract class Event<T> {
         this.marketplace = marketplace;
     }
 
+    @XmlElement
     public Contact getCreator() {
         return creator;
     }
