@@ -7,9 +7,9 @@
         </encoder>
     </appender>
 
-    <logger name="org.apache.http.client" level="debug"/>
+    <logger name="org.apache.http" level="debug"/>
 
-    <root level="info">
+    <root level="debug">
         <appender-ref ref="CONSOLE"/>
     </root>
 </configuration>
