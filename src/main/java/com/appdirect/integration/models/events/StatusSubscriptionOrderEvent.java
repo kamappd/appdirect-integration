@@ -8,15 +8,16 @@ import static javax.xml.bind.annotation.XmlAccessType.PROPERTY;
 
 @XmlRootElement(name = "event")
 @XmlAccessorType(PROPERTY)
-public class CancelSubscriptionOrderEvent extends Event<CancelSubscriptionOrderPayload> {
-    @Override
-    public void setPayload(CancelSubscriptionOrderPayload payload) {
-        this.payload = payload;
-    }
+public class StatusSubscriptionOrderEvent extends Event<StatusSubscriptionOrderPayload> {
 
     @XmlElement
     @Override
-    public CancelSubscriptionOrderPayload getPayload() {
-        return this.payload;
+    public StatusSubscriptionOrderPayload getPayload() {
+        return payload;
+    }
+
+    @Override
+    public void setPayload(StatusSubscriptionOrderPayload payload) {
+        this.payload = payload;
     }
 }

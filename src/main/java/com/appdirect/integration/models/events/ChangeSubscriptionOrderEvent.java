@@ -12,12 +12,12 @@ import static javax.xml.bind.annotation.XmlAccessType.PROPERTY;
 public class ChangeSubscriptionOrderEvent extends Event<ChangeSubscriptionOrderPayload> {
     @Override
     public void setPayload(ChangeSubscriptionOrderPayload payload) {
-        super.setPayload(payload);
+        this.payload = payload;
     }
 
     @XmlElement
     @Override
     public ChangeSubscriptionOrderPayload getPayload() {
-        return super.getPayload();
+        return this.payload;
     }
 }

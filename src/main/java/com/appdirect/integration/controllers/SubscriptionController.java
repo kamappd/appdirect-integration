@@ -7,6 +7,7 @@ import com.appdirect.integration.models.SuccessResponseMessage;
 import com.appdirect.integration.models.events.CancelSubscriptionOrderEvent;
 import com.appdirect.integration.models.events.ChangeSubscriptionOrderEvent;
 import com.appdirect.integration.models.events.CreateSubscriptionOrderEvent;
+import com.appdirect.integration.models.events.StatusSubscriptionOrderEvent;
 import com.appdirect.integration.services.EventDataRetrieverService;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
@@ -79,9 +80,16 @@ public class SubscriptionController {
         return new SuccessResponseMessage("toto", "1234");
     }
 
-    @ExceptionHandler(SubscriptionOrderEventException.class)
+    @RequestMapping(value = "/cancel", method = GET, produces = APPLICATION_XML_VALUE)
     @ResponseBody
-    private ErrorResponseMessage handleCreateSubscriptionOrderEventException(SubscriptionOrderEventException e) {
-        return e.getErrorResponseMessage();
+    public ResponseMessage handleStatusSubscriptionOrderEvent(@RequestParam("url") String url) throws IOException, JAXBException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthMessageSignerException {
+        StatusSubscriptionOrderEvent eventData = eventDataRetrieverService.getEventData(url, StatusSubscriptionOrderEvent.class);
+
+        if (eventData == null) {
+            new ErrorResponseMessage(ACCOUNT_NOT_FOUND, "toto");
+        }
+
+        logger.info("{}", eventData);
+        return new SuccessResponseMessage("toto", "1234");
     }
 }

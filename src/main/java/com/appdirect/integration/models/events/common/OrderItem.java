@@ -27,4 +27,24 @@ public class OrderItem {
     public void setUnit(OrderUnit unit) {
         this.unit = unit;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OrderItem orderItem = (OrderItem) o;
+
+        if (quantity != orderItem.quantity) return false;
+        if (unit != orderItem.unit) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = quantity;
+        result = 31 * result + (unit != null ? unit.hashCode() : 0);
+        return result;
+    }
 }

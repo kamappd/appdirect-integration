@@ -15,7 +15,7 @@ public abstract class Event<T> {
     private EventType type;
     private MarketPlace marketplace;
     private Contact creator;
-    private T payload;
+    protected T payload;
 
     @XmlElement
     public EventType getType() {
@@ -44,11 +44,7 @@ public abstract class Event<T> {
         this.creator = creator;
     }
 
-    public T getPayload() {
-        return payload;
-    }
+    public abstract  T getPayload();
 
-    public void setPayload(T payload) {
-        this.payload = payload;
-    }
+    public abstract void setPayload(T payload);
 }
