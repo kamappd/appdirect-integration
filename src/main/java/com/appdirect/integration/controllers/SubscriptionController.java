@@ -80,7 +80,7 @@ public class SubscriptionController {
         return new SuccessResponseMessage("toto", "1234");
     }
 
-    @RequestMapping(value = "/cancel", method = GET, produces = APPLICATION_XML_VALUE)
+    @RequestMapping(value = "/status", method = GET, produces = APPLICATION_XML_VALUE)
     @ResponseBody
     public ResponseMessage handleStatusSubscriptionOrderEvent(@RequestParam("url") String url) throws IOException, JAXBException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthMessageSignerException {
         StatusSubscriptionOrderEvent eventData = eventDataRetrieverService.getEventData(url, StatusSubscriptionOrderEvent.class);
