@@ -1,4 +1,7 @@
-package com.appdirect.integration.models;
+package com.appdirect.integration.models.events;
+
+import com.appdirect.integration.models.events.common.Contact;
+import com.appdirect.integration.models.events.common.MarketPlace;
 
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -8,7 +11,7 @@ import static javax.xml.bind.annotation.XmlAccessType.FIELD;
 
 @XmlRootElement(name = "event")
 @XmlAccessorType(FIELD)
-public class SubscriptionOrderEvent {
+public abstract class Event<T> {
     @XmlElement
     private EventType type;
     @XmlElement
@@ -16,7 +19,7 @@ public class SubscriptionOrderEvent {
     @XmlElement
     private Contact creator;
     @XmlElement
-    private SubscriptionOrderPayload payload;
+    private T payload;
 
     public EventType getType() {
         return type;
@@ -42,11 +45,11 @@ public class SubscriptionOrderEvent {
         this.creator = creator;
     }
 
-    public SubscriptionOrderPayload getPayload() {
+    public T getPayload() {
         return payload;
     }
 
-    public void setPayload(SubscriptionOrderPayload payload) {
+    public void setPayload(T payload) {
         this.payload = payload;
     }
 }

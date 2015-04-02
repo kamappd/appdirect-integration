@@ -1,4 +1,4 @@
-package com.appdirect.integration.models;
+package com.appdirect.integration.models.events.common;
 
 
 import javax.xml.bind.annotation.XmlAccessorType;
