@@ -6,9 +6,11 @@ import com.appdirect.integration.models.events.common.MarketPlace;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import static javax.xml.bind.annotation.XmlAccessType.FIELD;
 
+@XmlTransient
 public abstract class Event<T> {
     @XmlElement
     private EventType type;

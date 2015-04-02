@@ -1,6 +1,6 @@
 package com.appdirect.integration.controllers;
 
-import com.appdirect.integration.EventDataRetrieverService;
+import com.appdirect.integration.services.EventDataRetrieverService;
 import com.appdirect.integration.models.ErrorResponseMessage;
 import com.appdirect.integration.models.ResponseMessage;
 import com.appdirect.integration.models.SuccessResponseMessage;

@@ -1,5 +1,6 @@
-package com.appdirect.integration;
+package com.appdirect.integration.services;
 
+import com.appdirect.integration.utils.EventParser;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
@@ -11,16 +12,20 @@ import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 import java.io.IOException;
 
 @Service
 public class EventDataRetrieverService {
 
-    @Autowired
     private OAuthConsumer oAuthConsumer;
+    private EventParser eventParser;
+
+    @Autowired
+    public EventDataRetrieverService(OAuthConsumer oAuthConsumer, EventParser eventParser) {
+        this.oAuthConsumer = oAuthConsumer;
+        this.eventParser = eventParser;
+    }
 
     public <T> T getEventData(String url, Class<T> eventClass) throws JAXBException, IOException, OAuthCommunicationException, OAuthExpectationFailedException, OAuthMessageSignerException {
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
@@ -30,9 +35,7 @@ public class EventDataRetrieverService {
             try (CloseableHttpResponse response = httpclient.execute(httpRequest)) {
                 if (response.getStatusLine().getStatusCode() == 200) {
 
-                    JAXBContext context = JAXBContext.newInstance(eventClass);
-                    Unmarshaller unmarshaller = context.createUnmarshaller();
-                    return (T) unmarshaller.unmarshal(response.getEntity().getContent());
+                    return eventParser.parse(response.getEntity().getContent(), eventClass);
                 }
 
             }
