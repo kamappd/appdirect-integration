@@ -40,7 +40,6 @@ public class SubscriptionController {
     @RequestMapping(value = "/create", method = GET, produces = APPLICATION_XML_VALUE)
     @ResponseBody()
     public ResponseMessage handleCreateSubscriptionOrderEvent(@RequestParam("url") String url) throws IOException, JAXBException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthMessageSignerException {
-        url = "https://www.appdirect.com/api/integration/v1/events/e5be7b7f-88f1-405f-9f41-2cf82bb2c9d7";
         CreateSubscriptionOrderEvent eventData = eventDataRetrieverService.getEventData(url, CreateSubscriptionOrderEvent.class);
         if (eventData == null) {
             return new ErrorResponseMessage(ACCOUNT_NOT_FOUND, "toto");
@@ -52,7 +51,6 @@ public class SubscriptionController {
     @RequestMapping(value = "/cancel", method = GET, produces = APPLICATION_XML_VALUE)
     @ResponseBody()
     public ResponseMessage handleCancelSubscriptionOrderEvent(@RequestParam("url") String url) throws IOException, JAXBException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthMessageSignerException {
-        url = "https://www.appdirect.com/api/integration/v1/events/e5be7b7f-88f1-405f-9f41-2cf82bb2c9d7";
         CancelSubscriptionOrderEvent eventData = eventDataRetrieverService.getEventData(url, CancelSubscriptionOrderEvent.class);
         if (eventData == null) {
             return new ErrorResponseMessage(ACCOUNT_NOT_FOUND, "toto");
