@@ -7,7 +7,7 @@
         </encoder>
     </appender>
 
-    <logger name="org.springframework.security" level="debug"/>
+    <logger name="reactor" level="debug"/>
 
     <root level="info">
         <appender-ref ref="CONSOLE"/>

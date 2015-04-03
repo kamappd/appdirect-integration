@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import reactor.core.Reactor;
+import reactor.event.Event;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
@@ -37,10 +39,11 @@ public class SubscriptionController {
 
     private static final Logger logger = LoggerFactory.getLogger(SubscriptionController.class);
     private EventDataRetrieverService eventDataRetrieverService;
-
+    private Reactor reactor;
     @Autowired
-    public SubscriptionController(EventDataRetrieverService eventDataRetrieverService) {
+    public SubscriptionController(EventDataRetrieverService eventDataRetrieverService, Reactor reactor) {
         this.eventDataRetrieverService = eventDataRetrieverService;
+        this.reactor = reactor;
     }
 
     @RequestMapping(value = "/create", method = GET, produces = APPLICATION_XML_VALUE)
@@ -53,6 +56,7 @@ public class SubscriptionController {
         }
 
         logger.info("{}", eventData);
+        reactor.notify("events", Event.wrap(eventData));
         return new SuccessResponseMessage("toto", "1234");
     }
 
@@ -66,6 +70,7 @@ public class SubscriptionController {
         }
 
         logger.info("{}", eventData);
+        reactor.notify("events", Event.wrap(eventData));
         return new SuccessResponseMessage("toto", "1234");
     }
 
@@ -79,6 +84,7 @@ public class SubscriptionController {
         }
 
         logger.info("{}", eventData);
+        reactor.notify("events", Event.wrap(eventData));
         return new SuccessResponseMessage("toto", "1234");
     }
 
@@ -92,6 +98,7 @@ public class SubscriptionController {
         }
 
         logger.info("{}", eventData);
+        reactor.notify("events", Event.wrap(eventData));
         return new SuccessResponseMessage("toto", "1234");
     }
 }
