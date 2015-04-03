@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<b:beans xmlns:b="http://www.springframework.org/schema/beans"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://www.springframework.org/schema/security"
+         xmlns:oauth="http://www.springframework.org/schema/security/oauth"
+         xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+         http://www.springframework.org/schema/security/oauth http://www.springframework.org/schema/security/spring-security-oauth.xsd
+         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Global Security Settings -->
+    <global-method-security pre-post-annotations="enabled"/>
+
+    <!-- OAuth 1.0 2-Legged Security -->
+    <http pattern="/api/**" use-expressions="true" create-session="never"
+          entry-point-ref="oauthProcessingFilterEntryPoint">
+        <intercept-url pattern="/**" access="hasRole('ROLE_OAUTH')"/>
+    </http>
+
+    <authentication-manager alias="authenticationManager"/>
+
+    <b:bean id="oauthProcessingFilterEntryPoint" class="com.appdirect.integration.security.oauth.OAuthProcessingFilterEntryPointImpl"/>
+    <b:bean id="oAuthAuthenticationHandler"
+            class="org.springframework.security.oauth.provider.DefaultAuthenticationHandler"/>
+    <b:bean id="consumerDetailsService" class="com.appdirect.integration.security.oauth.TwoLeggedConsumerDetailsService"/>
+
+    <oauth:provider consumer-details-service-ref="consumerDetailsService"
+                    token-id-param="oauth_token"
+                    token-services-ref="tokenServices"
+                    request-token-url="/api/request_token"
+                    access-token-url="/api/access_token"
+                    auth-handler-ref="oAuthAuthenticationHandler"
+                    require10a="false"/>
+
+    <oauth:token-services id="tokenServices"/>
+
+    <b:bean id="oauthRequestTokenFilter" class="com.appdirect.integration.security.oauth.PreAuthenticatedRequestTokenProcessingFilter3">
+        <b:property name="filterProcessesUrl" value="/api/request_token"/>
+        <b:property name="require10a" value="false"/>
+    </b:bean>
+
+</b:beans>
