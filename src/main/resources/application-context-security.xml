@@ -33,7 +33,7 @@
 
     <oauth:token-services id="tokenServices"/>
 
-    <b:bean id="oauthRequestTokenFilter" class="com.appdirect.integration.security.oauth.PreAuthenticatedRequestTokenProcessingFilter3">
+    <b:bean id="oauthRequestTokenFilter" class="com.appdirect.integration.security.oauth.PreAuthenticatedRequestTokenProcessingFilter">
         <b:property name="filterProcessesUrl" value="/api/request_token"/>
         <b:property name="require10a" value="false"/>
     </b:bean>
