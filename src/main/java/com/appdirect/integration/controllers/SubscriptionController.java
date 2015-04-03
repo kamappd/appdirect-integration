@@ -56,7 +56,7 @@ public class SubscriptionController {
         }
 
         logger.info("{}", eventData);
-        reactor.notify("events", Event.wrap(eventData));
+        reactor.notify("event", Event.wrap(eventData));
         return new SuccessResponseMessage("toto", "1234");
     }
 
@@ -70,7 +70,7 @@ public class SubscriptionController {
         }
 
         logger.info("{}", eventData);
-        reactor.notify("events", Event.wrap(eventData));
+        reactor.notify("event", Event.wrap(eventData));
         return new SuccessResponseMessage("toto", "1234");
     }
 
@@ -84,7 +84,7 @@ public class SubscriptionController {
         }
 
         logger.info("{}", eventData);
-        reactor.notify("events", Event.wrap(eventData));
+        reactor.notify("event", Event.wrap(eventData));
         return new SuccessResponseMessage("toto", "1234");
     }
 
@@ -98,7 +98,7 @@ public class SubscriptionController {
         }
 
         logger.info("{}", eventData);
-        reactor.notify("events", Event.wrap(eventData));
+        reactor.notify("event", Event.wrap(eventData));
         return new SuccessResponseMessage("toto", "1234");
     }
 }
