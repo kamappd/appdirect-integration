@@ -13,7 +13,7 @@
     <!-- OAuth 1.0 2-Legged Security -->
     <http pattern="/api/**" use-expressions="true" create-session="never"
           entry-point-ref="oauthProcessingFilterEntryPoint">
-        <intercept-url pattern="/**" access="hasRole('ROLE_OAUTH')"/>
+        <intercept-url pattern="/**" access="hasRole('ROLE_OAUTH')" requires-channel="https"/>
     </http>
 
     <authentication-manager alias="authenticationManager"/>
