@@ -10,8 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class OAuthProcessingFilterEntryPointImpl extends OAuthProcessingFilterEntryPoint {
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException failure)
-            throws IOException, ServletException {
+    public void commence(HttpServletRequest request, HttpServletResponse response, org.springframework.security.core.AuthenticationException authException) throws IOException, ServletException {
         // TODO Add your custom error handling here.
         // Failures here will be Spring Security's.
         // Here are some of the Exceptions you can handle:
