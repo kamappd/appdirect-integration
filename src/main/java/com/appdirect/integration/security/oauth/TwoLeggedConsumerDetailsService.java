@@ -36,7 +36,7 @@ public class TwoLeggedConsumerDetailsService implements ConsumerDetailsService {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_OAUTH"));
 
-        return new OAuthConsumerDetails3(
+        return new OAuthConsumerDetails(
                 consumerKey,
                 consumerSecret,
                 authorities);

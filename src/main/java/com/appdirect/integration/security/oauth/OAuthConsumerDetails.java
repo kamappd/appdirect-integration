@@ -7,14 +7,14 @@ import org.springframework.security.oauth.provider.ExtraTrustConsumerDetails;
 
 import java.util.List;
 
-public class OAuthConsumerDetails3 implements ExtraTrustConsumerDetails {
+public class OAuthConsumerDetails implements ExtraTrustConsumerDetails {
 
     private String consumerKey;
     private SharedConsumerSecretImpl signatureSecret;
     private List<GrantedAuthority> authorities;
 
-    public OAuthConsumerDetails3(String consumerKey,
-                                 String signatureSecret, List<GrantedAuthority> authorities) {
+    public OAuthConsumerDetails(String consumerKey,
+                                String signatureSecret, List<GrantedAuthority> authorities) {
         this.consumerKey = consumerKey;
         this.signatureSecret = new SharedConsumerSecretImpl(signatureSecret);
         this.authorities = authorities;
