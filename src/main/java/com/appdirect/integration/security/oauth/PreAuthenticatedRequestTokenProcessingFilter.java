@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class PreAuthenticatedRequestTokenProcessingFilter3 extends UnauthenticatedRequestTokenProcessingFilter {
+public class PreAuthenticatedRequestTokenProcessingFilter extends UnauthenticatedRequestTokenProcessingFilter {
     @Autowired
     private OAuthVerifierServices verifierServices;
 
