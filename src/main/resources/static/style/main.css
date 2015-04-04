@@ -1,0 +1,17 @@
+body {
+    font-family: Verdana, sans-serif;
+}
+
+.event-list .header {
+    font-width: bold;
+
+}
+
+.event-list .odd {
+    background-color: #dcdcdc;
+
+}
+
+.event-list .event {
+
+}
