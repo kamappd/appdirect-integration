@@ -10,8 +10,6 @@ import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -36,6 +34,8 @@ public class EventsController extends TextWebSocketHandler {
         this.eventsService = eventsService;
     }
 
+//    @MessageMapping("/events")
+//    @SendTo("/topic/events")
     @RequestMapping(value = "/events", method = GET, produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<Event> getEvents() throws Exception {
@@ -43,8 +43,6 @@ public class EventsController extends TextWebSocketHandler {
     }
 
     @Override
-    @MessageMapping("/events")
-    @SendTo("/topic/events")
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         super.handleTextMessage(session, message);
         session.sendMessage(new TextMessage(objectMapper.writeValueAsString(eventsService.getEvents())));

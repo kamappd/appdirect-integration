@@ -8,27 +8,31 @@ var app = angular.module('app', [
 ]);
 
 
-app.controller('EventsController', ['$scope', '$location', '$websocket',
-    function ($scope, $location, $websocket) {
+app.controller('EventsController', ['$scope', '$location', '$http', '$websocket',
+    function ($scope, $location, $http, $websocket) {
       $scope.events = [];
-      $scope.toto = "toto";
 
-      console.log("toto");
-      var host = 'ws://' + $location.host() + '/events';
-      var ws = $websocket.$new(host);
+      $http.get('/events')
+        .success(function(data) {
+          $scope.events = data;
+        });
 
-      ws.$on('$open', function () {
-        console.log('Oh my gosh, websocket is really open! Fukken awesome!');
-      });
-
-      ws.$on('/topic/events', function (data) {
-        $scope.events = data;
-        //ws.$close();
-      });
-
-      ws.$on('$close', function () {
-        console.log('Noooooooooou, I want to have more fun with ngWebsocket, damn it!');
-      });
+      //console.log("toto");
+      //var host = 'ws://' + $location.host() + '/events';
+      //var ws = $websocket.$new(host);
+      //
+      //ws.$on('$open', function () {
+      //  console.log('Oh my gosh, websocket is really open! Fukken awesome!');
+      //});
+      //
+      //ws.$on('/topic/events', function (data) {
+      //  $scope.events = data;
+      //  //ws.$close();
+      //});
+      //
+      //ws.$on('$close', function () {
+      //  console.log('Noooooooooou, I want to have more fun with ngWebsocket, damn it!');
+      //});
 
     }]
 );
