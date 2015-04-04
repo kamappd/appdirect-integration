@@ -8,16 +8,14 @@ var app = angular.module('app', [
 ]);
 
 
-app
-  .controller('EventsController', ['$scope', '$websocket',
-    function ($scope, $websocket) {
+app.controller('EventsController', ['$scope', '$location', '$websocket',
+    function ($scope, $location, $websocket) {
       $scope.events = [];
       $scope.toto = "toto";
 
       console.log("toto");
-      var ws = $websocket.$new('ws://localhost:5000/events'); // instance of ngWebsocket, handled by $websocket service
-
-      ws.open();
+      var host = $location.host().replace(/^http/, 'ws');
+      var ws = $websocket.$new(host + '/events');
 
       ws.$on('$open', function () {
         console.log('Oh my gosh, websocket is really open! Fukken awesome!');
