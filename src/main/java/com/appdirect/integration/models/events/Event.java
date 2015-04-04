@@ -48,4 +48,28 @@ public abstract class Event<T> {
     public abstract T getPayload();
 
     public abstract void setPayload(T payload);
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Event event = (Event) o;
+
+        if (creator != null ? !creator.equals(event.creator) : event.creator != null) return false;
+        if (marketplace != null ? !marketplace.equals(event.marketplace) : event.marketplace != null) return false;
+        if (payload != null ? !payload.equals(event.payload) : event.payload != null) return false;
+        if (type != event.type) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = type != null ? type.hashCode() : 0;
+        result = 31 * result + (marketplace != null ? marketplace.hashCode() : 0);
+        result = 31 * result + (creator != null ? creator.hashCode() : 0);
+        result = 31 * result + (payload != null ? payload.hashCode() : 0);
+        return result;
+    }
 }

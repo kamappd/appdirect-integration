@@ -15,18 +15,49 @@
 </head>
 <body ng-controller="EventsController">
 
-<table class="table table-striped events-list">
-    <thead>
-    <tr>
-        <td>Event type</td>
-        <td>Payload</td>
-    </tr>
-    </thead>
-    <tr ng-repeat="event in events">
-        {{event}}
-        <td>{{event.type}}</td>
-        <td>{{event.payload}}</td>
-    </tr>
-</table>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Subscribers</h3>
+    </div>
+    <div class="panel-body">
+        <table class="table table-striped subscribers-list">
+            <thead>
+            <tr>
+                <td>Company</td>
+                <td>Edition</td>
+                <td>Items</td>
+            </tr>
+            </thead>
+            <tr ng-repeat="subscriber in subscribers">
+                <td>{{subscriber.company.name}}</td>
+                <td>{{subscriber.order.editionCode}}</td>
+                <td><span ng-if="$middle">, </span><span ng-repeat="item in subscriber.order.items">{{item.quantity}} {{item.unit}} </span>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Events</h3>
+    </div>
+    <div class="panel-body">
+
+        <table class="table table-striped events-list">
+            <thead>
+            <tr>
+                <td>Event type</td>
+                <td>Payload</td>
+            </tr>
+            </thead>
+            <tr ng-repeat="event in events">
+                <td>{{event.type}}</td>
+                <td>{{event.payload}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
 </body>
 </html>

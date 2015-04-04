@@ -1,7 +1,7 @@
 package com.appdirect.integration.services;
 
-import com.appdirect.integration.models.events.CreateSubscriptionOrderEvent;
 import com.appdirect.integration.models.events.Event;
+import com.appdirect.integration.models.events.EventType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,17 +19,17 @@ import java.util.List;
 import static reactor.event.selector.Selectors.$;
 
 @Service
-public class EventsService implements Consumer<reactor.event.Event<Event>> {
+public class SubscribersService implements Consumer<reactor.event.Event<Event>> {
 
-    private static Logger logger = LoggerFactory.getLogger(EventsService.class);
+    private static Logger logger = LoggerFactory.getLogger(SubscribersService.class);
 
-    private List<Event> events = new ArrayList<>();
+    private List<Event> subscribers = new ArrayList<>();
     private File file;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private Reactor publisher;
 
     @Autowired
-    public EventsService(Reactor publisher) {
+    public SubscribersService(Reactor publisher) {
         this.publisher = publisher;
     }
 
@@ -38,15 +38,15 @@ public class EventsService implements Consumer<reactor.event.Event<Event>> {
 
         publisher.on($("event"), this);
 
-        loadEvents();
+        loadSubscribers();
     }
 
-    private void loadEvents() {
-        file = new File("events.json");
+    private void loadSubscribers() {
+        file = new File("subscribers.json");
         if (file.exists()) {
             try (InputStream is = new FileInputStream(file)) {
                 ObjectMapper objectMapper = new ObjectMapper();
-                events = objectMapper.readValue(is, List.class);
+                subscribers = objectMapper.readValue(is, List.class);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -60,7 +60,7 @@ public class EventsService implements Consumer<reactor.event.Event<Event>> {
 
     private void saveEvents() {
         try (OutputStream is = new FileOutputStream(file)) {
-            objectMapper.writeValue(is, events);
+            objectMapper.writeValue(is, subscribers);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -68,16 +68,17 @@ public class EventsService implements Consumer<reactor.event.Event<Event>> {
 
     @Override
     public void accept(reactor.event.Event<Event> eventWrapper) {
-        logger.info("handle event {}", eventWrapper.getData());
-        events.add(eventWrapper.getData());
+        Event event = eventWrapper.getData();
+        if (event.getType() == EventType.SUBSCRIPTION_ORDER) {
+
+        } else if (event.getType() == EventType.SUBSCRIPTION_CANCEL) {
+            subscribers.add(event);
+        } else {
+            subscribers.remove(event);
+        }
     }
 
-    public List<Event> getEvents() {
-        return new ArrayList<>(this.events);
-    }
-
-    public void createFakeEvent() {
-        CreateSubscriptionOrderEvent eventData = new CreateSubscriptionOrderEvent();
-        publisher.notify("event", reactor.event.Event.wrap(eventData));
+    public List<Event> getSubscribers() {
+        return new ArrayList<>(this.subscribers);
     }
 }

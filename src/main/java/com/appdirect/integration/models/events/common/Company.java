@@ -57,4 +57,30 @@ public class Company {
     public void setWebsite(String website) {
         this.website = website;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Company company = (Company) o;
+
+        if (email != null ? !email.equals(company.email) : company.email != null) return false;
+        if (name != null ? !name.equals(company.name) : company.name != null) return false;
+        if (phoneNumber != null ? !phoneNumber.equals(company.phoneNumber) : company.phoneNumber != null) return false;
+        if (uuid != null ? !uuid.equals(company.uuid) : company.uuid != null) return false;
+        if (website != null ? !website.equals(company.website) : company.website != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = uuid != null ? uuid.hashCode() : 0;
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
+        result = 31 * result + (website != null ? website.hashCode() : 0);
+        return result;
+    }
 }
