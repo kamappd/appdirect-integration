@@ -3,13 +3,15 @@ body {
 }
 
 .events-list .header {
-    font-width: bold;
-    padding: 5px 0;
+    font-weight: bold;
+}
 
+.events-list .header td {
+    padding: 15px 0;
 }
 
 .events-list .odd {
-    background-color: #dcdcdc;
+    background-color: #f3f3f3;
 
 }
 
