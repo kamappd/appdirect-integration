@@ -10,13 +10,9 @@ import reactor.core.Environment;
 import reactor.core.Reactor;
 import reactor.core.spec.Reactors;
 
-import javax.annotation.PostConstruct;
-
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfiguration extends AbstractWebSocketMessageBrokerConfigurer {
-
-    private static final int NUMBER_OF_QUOTES = 10;
 
     @Bean
     Environment env() {

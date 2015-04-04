@@ -1,14 +1,12 @@
 'use strict';
 
 angular.module('app.controllers')
-  .run(function ($websocket) {
-
-  })
-  .controller('eventsCtrl', ['$scope', '$websocket',
+  .controller('EventsController', ['$scope', '$websocket',
     function ($scope, $websocket) {
       $scope.events = [];
+      $scope.toto = "toto";
 
-
+      console.log("toto");
       var ws = $websocket.$new('ws://localhost:12345/topic'); // instance of ngWebsocket, handled by $websocket service
 
       ws.open();
