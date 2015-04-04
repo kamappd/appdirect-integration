@@ -14,8 +14,8 @@ app.controller('EventsController', ['$scope', '$location', '$websocket',
       $scope.toto = "toto";
 
       console.log("toto");
-      var host = $location.host().replace(/^http/, 'ws');
-      var ws = $websocket.$new(host + '/events');
+      var host = 'ws://' + $location.host() + '/events';
+      var ws = $websocket.$new(host);
 
       ws.$on('$open', function () {
         console.log('Oh my gosh, websocket is really open! Fukken awesome!');
