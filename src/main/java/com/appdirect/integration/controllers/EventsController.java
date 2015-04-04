@@ -34,8 +34,8 @@ public class EventsController {
 
     @MessageMapping("/events")
     @SendTo("/topic/events")
-//    @RequestMapping(value = "/events", method = GET, produces = APPLICATION_JSON_VALUE)
-//    @ResponseBody
+    @RequestMapping(value = "/events", method = GET, produces = APPLICATION_JSON_VALUE)
+    @ResponseBody
     public List<Event> getEvents() throws Exception {
         return eventsService.getEvents();
     }

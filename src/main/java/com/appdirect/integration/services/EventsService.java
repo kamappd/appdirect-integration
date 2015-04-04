@@ -23,7 +23,7 @@ public class EventsService implements Consumer<reactor.event.Event<Event>> {
 
     private static Logger logger = LoggerFactory.getLogger(EventsService.class);
 
-    private List<Event> events;
+    private List<Event> events = new ArrayList<>();
     private File file;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private Reactor publisher;
