@@ -12,7 +12,7 @@ app.controller('EventsController', ['$scope', '$location', '$http', '$websocket'
     function ($scope, $location, $http, $websocket) {
       $scope.events = [];
 
-      $http.get('/events')
+      $http.get('/subscriptions')
         .success(function(data) {
           $scope.events = data;
         });

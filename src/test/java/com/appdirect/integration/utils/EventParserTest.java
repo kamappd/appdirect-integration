@@ -8,6 +8,7 @@ import java.io.ByteArrayInputStream;
 
 import static com.appdirect.integration.models.events.EventType.*;
 import static com.appdirect.integration.models.events.NoticeType.DEACTIVATED;
+import static com.appdirect.integration.models.events.common.AccountStatus.FREE_TRIAL_EXPIRED;
 import static com.appdirect.integration.models.events.common.OrderUnit.MEGABYTE;
 import static com.appdirect.integration.models.events.common.OrderUnit.USER;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -212,7 +213,7 @@ public class EventParserTest {
     }
 
     private void verifyStatusSubscriptionOrderPayload(StatusSubscriptionOrderPayload payload) {
-        assertThat(payload.getAccount(), is(anDefaultAccount()));
+        assertThat(payload.getAccount(), is(anAccountWithStatus(FREE_TRIAL_EXPIRED)));
         assertThat(payload.getNotice(), is(aDefaultNotice()));
     }
 
@@ -255,6 +256,12 @@ public class EventParserTest {
     private Account anDefaultAccount() {
         Account account = new Account();
         account.setAccountIdentifier("MY_ACCOUNT");
+        return account;
+    }
+
+    private Account anAccountWithStatus(AccountStatus freeTrialExpired) {
+        Account account = anDefaultAccount();
+        account.setStatus(freeTrialExpired);
         return account;
     }
 

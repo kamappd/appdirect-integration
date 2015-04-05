@@ -1,116 +1,87 @@
 package com.appdirect.integration.services;
 
 import com.appdirect.integration.models.Subscription;
-import com.appdirect.integration.models.events.ChangeSubscriptionOrderEvent;
-import com.appdirect.integration.models.events.ChangeSubscriptionOrderPayload;
-import com.appdirect.integration.models.events.CreateSubscriptionOrderEvent;
-import com.appdirect.integration.models.events.CreateSubscriptionOrderPayload;
-import com.appdirect.integration.models.events.common.*;
+import com.appdirect.integration.models.events.common.EditionType;
+import com.appdirect.integration.models.events.common.Order;
+import com.appdirect.integration.models.events.common.OrderItem;
+import com.appdirect.integration.models.events.common.OrderUnit;
+import com.appdirect.integration.utils.IdGenerator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import reactor.event.Event;
 
-import static com.appdirect.integration.models.events.EventType.SUBSCRIPTION_CHANGE;
-import static com.appdirect.integration.models.events.EventType.SUBSCRIPTION_ORDER;
 import static com.appdirect.integration.models.events.common.EditionType.BASIC;
 import static com.appdirect.integration.models.events.common.EditionType.PREMIUM;
 import static com.appdirect.integration.models.events.common.OrderUnit.MEGABYTE;
 import static com.appdirect.integration.models.events.common.OrderUnit.USER;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SubscriptionsServiceTest {
 
     @InjectMocks
     private SubscriptionsService subscribersService;
+    @Mock
+    private IdGenerator idGenerator;
 
     @Test
     public void when_receiving_new_order__add_subscription() throws Exception {
+
         // Given
-        CreateSubscriptionOrderEvent createSubscriptionOrderEvent = aStandardCreateSubscriptionOrder();
+        when(idGenerator.generateId()).thenReturn("1234");
+        Subscription subscription = aBasicSubscription("1234");
 
         // Execute
-        subscribersService.accept(Event.wrap(createSubscriptionOrderEvent));
+        subscribersService.save(subscription);
 
         // Verify
-        assertThat(subscribersService.getSubscriptions(), contains(createSubscriptionOrderEvent));
+        assertThat(subscribersService.getSubscriptions(), contains(subscription));
     }
 
     @Test
     public void when_receiving_change_subscription__update_subscription() throws Exception {
+
         // Given
-        subscribersService.subscriptions.add(aBasicSubscription());
-        ChangeSubscriptionOrderEvent changeSubscriptionOrderEvent = aChangeSubscriptionOrderEvent();
+        givenASubscriptionAlreadyExists("1234");
 
         // Execute
-        subscribersService.accept(Event.wrap(changeSubscriptionOrderEvent));
+        subscribersService.update("1234", aPremiumOrder());
 
         // Verify
-//        verifySubscriberUpdated(createSubscriptionOrderEvent, changeSubscriptionOrderEvent);
+        Subscription expectedSubscription = aBasicSubscription("1234");
+        expectedSubscription.setOrder(aPremiumOrder());
+        assertThat(subscribersService.getSubscriptions(), contains(expectedSubscription));
     }
 
     @Test
     public void when_receiving_cancel_subscription__remove_subscription() throws Exception {
 
+        // Given
+        givenASubscriptionAlreadyExists("1234");
+
+        // Execute
+        subscribersService.delete("1234");
+
+        // Verify
+        assertThat(subscribersService.getSubscriptions(), hasSize(0));
     }
 
-    private Subscription aBasicSubscription() {
+    private Subscription aBasicSubscription(String id) {
         Subscription subscription = new Subscription();
-        subscription.setId("1");
+        subscription.setId(id);
+        subscription.setCompanyName("aCompany");
+        subscription.setOrder(aBasicOrder());
         return subscription;
     }
 
-    private CreateSubscriptionOrderEvent aStandardCreateSubscriptionOrder() {
-        CreateSubscriptionOrderEvent event = new CreateSubscriptionOrderEvent();
-        event.setType(SUBSCRIPTION_ORDER);
-        event.setMarketplace(aStandardMarketPlace());
-        event.setCreator(aStandardCreator());
-        event.setPayload(aStandardCreateSubscriptionOrderPayload());
-        return event;
-    }
-
-    private ChangeSubscriptionOrderEvent aChangeSubscriptionOrderEvent() {
-        ChangeSubscriptionOrderEvent event = new ChangeSubscriptionOrderEvent();
-        event.setType(SUBSCRIPTION_CHANGE);
-        event.setMarketplace(aStandardMarketPlace());
-        event.setCreator(aStandardCreator());
-        event.setPayload(aChangeSubscriptionOrderPayload());
-        return event;
-    }
-
-    private MarketPlace aStandardMarketPlace() {
-        MarketPlace marketPlace = new MarketPlace();
-        marketPlace.setBaseUrl("http://somewhere_over_the_rain.bow");
-        marketPlace.setPartner("mate");
-        return marketPlace;
-    }
-
-    private Contact aStandardCreator() {
-        Contact contact = new Contact();
-        contact.setFirstName("isreal");
-        contact.setLastName("kamkawiwo'ole");
-        contact.setLanguage("en");
-        contact.setEmail("somewhere@rain.bow");
-        contact.setOpenId("AFECDB349827423A");
-        return contact;
-    }
-
-    private CreateSubscriptionOrderPayload aStandardCreateSubscriptionOrderPayload() {
-        CreateSubscriptionOrderPayload payload = new CreateSubscriptionOrderPayload();
-        payload.setOrder(aBasicOrder());
-        payload.setCompany(aStandardCompany());
-        return payload;
-    }
-
-    private ChangeSubscriptionOrderPayload aChangeSubscriptionOrderPayload() {
-        ChangeSubscriptionOrderPayload payload = new ChangeSubscriptionOrderPayload();
-        payload.setAccount(aBasicAccount());
-        payload.setOrder(aPremiumOrder());
-        return payload;
+    private void givenASubscriptionAlreadyExists(String id) {
+        subscribersService.subscriptions.put(id, aBasicSubscription(id));
     }
 
     private Order aBasicOrder() {
@@ -134,29 +105,4 @@ public class SubscriptionsServiceTest {
         orderItem.setUnit(orderUnitser);
         return orderItem;
     }
-
-
-    private Company aStandardCompany() {
-        Company company = new Company();
-        company.setName("sun");
-        company.setPhoneNumber("1(555)444-3333");
-        company.setUuid("1");
-        company.setWebsite("http://could.sky.net");
-        company.setEmail("cloud@sky.net");
-        return company;
-    }
-
-    private Account aBasicAccount() {
-        Account account = new Account();
-        account.setAccountIdentifier("1");
-        return account;
-    }
-
-//    private void verifySubscriberUpdated(CreateSubscriptionOrderEvent createSubscriptionOrderEvent, ChangeSubscriptionOrderEvent changeSubscriptionOrderEvent) {
-//        assertThat(subscribersService.getSubscriptions(), hasSize(1));
-//        com.appdirect.integration.models.events.Event event = subscribersService.getSubscriptions().get(0);
-//        assertThat(event, inInstanceOf(C));
-//        assertThat(event, contains(changeSubscriptionOrderEvent));
-//    }
-
 }

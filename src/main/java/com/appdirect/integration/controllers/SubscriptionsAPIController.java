@@ -1,13 +1,13 @@
 package com.appdirect.integration.controllers;
 
-import com.appdirect.integration.models.ErrorResponseMessage;
-import com.appdirect.integration.models.ResponseMessage;
-import com.appdirect.integration.models.SuccessResponseMessage;
+import com.appdirect.integration.models.*;
 import com.appdirect.integration.models.events.CancelSubscriptionOrderEvent;
 import com.appdirect.integration.models.events.ChangeSubscriptionOrderEvent;
 import com.appdirect.integration.models.events.CreateSubscriptionOrderEvent;
 import com.appdirect.integration.models.events.StatusSubscriptionOrderEvent;
 import com.appdirect.integration.services.EventDataRetrieverService;
+import com.appdirect.integration.services.EventsService;
+import com.appdirect.integration.services.SubscriptionsService;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
@@ -19,8 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import reactor.core.Reactor;
-import reactor.event.Event;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
@@ -37,12 +35,14 @@ public class SubscriptionsAPIController {
 
     private static final Logger logger = LoggerFactory.getLogger(SubscriptionsAPIController.class);
     private EventDataRetrieverService eventDataRetrieverService;
-    private Reactor reactor;
+    private SubscriptionsService subscriptionsService;
+    private EventsService eventsService;
 
     @Autowired
-    public SubscriptionsAPIController(EventDataRetrieverService eventDataRetrieverService, Reactor reactor) {
+    public SubscriptionsAPIController(EventDataRetrieverService eventDataRetrieverService, SubscriptionsService subscriptionsService, EventsService eventsService) {
         this.eventDataRetrieverService = eventDataRetrieverService;
-        this.reactor = reactor;
+        this.subscriptionsService = subscriptionsService;
+        this.eventsService = eventsService;
     }
 
     @RequestMapping(value = "/create", method = GET, produces = APPLICATION_XML_VALUE)
@@ -55,8 +55,18 @@ public class SubscriptionsAPIController {
         }
 
         logger.info("{}", eventData);
-        reactor.notify("event", Event.wrap(eventData));
-        return new SuccessResponseMessage("toto", "1234");
+        Subscription subscription = createSubscription(eventData);
+        String id = subscriptionsService.save(subscription);
+        eventsService.saveEvent(eventData);
+        return new SuccessResponseMessage("toto", id);
+    }
+
+    private Subscription createSubscription(CreateSubscriptionOrderEvent eventData) {
+        Subscription subscription = new Subscription();
+        subscription.setId(eventData.getPayload().getCompany().getUuid());
+        subscription.setCompanyName(eventData.getPayload().getCompany().getName());
+        subscription.setOrder(eventData.getPayload().getOrder());
+        return subscription;
     }
 
     @RequestMapping(value = "/change", method = GET, produces = APPLICATION_XML_VALUE)
@@ -69,7 +79,7 @@ public class SubscriptionsAPIController {
         }
 
         logger.info("{}", eventData);
-        reactor.notify("event", Event.wrap(eventData));
+        subscriptionsService.update(eventData.getPayload().getAccount().getAccountIdentifier(), eventData.getPayload().getOrder());
         return new SuccessResponseMessage("toto", "1234");
     }
 
@@ -83,7 +93,7 @@ public class SubscriptionsAPIController {
         }
 
         logger.info("{}", eventData);
-        reactor.notify("event", Event.wrap(eventData));
+        subscriptionsService.delete(eventData.getPayload().getAccount().getAccountIdentifier());
         return new SuccessResponseMessage("toto", "1234");
     }
 
@@ -97,7 +107,10 @@ public class SubscriptionsAPIController {
         }
 
         logger.info("{}", eventData);
-        reactor.notify("event", Event.wrap(eventData));
+
+        SubscriptionStatus subscriptionStatus = SubscriptionStatus.valueOf(eventData.getPayload().getNotice().getType().name());
+
+        subscriptionsService.changeStatus(eventData.getPayload().getAccount().getAccountIdentifier(), subscriptionStatus);
         return new SuccessResponseMessage("toto", "1234");
     }
 }

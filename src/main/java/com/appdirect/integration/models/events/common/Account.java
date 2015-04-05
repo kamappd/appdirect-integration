@@ -10,6 +10,7 @@ import static javax.xml.bind.annotation.XmlAccessType.FIELD;
 public class Account {
     @XmlElement
     private String accountIdentifier;
+    private AccountStatus status;
 
     public String getAccountIdentifier() {
         return accountIdentifier;
@@ -17,6 +18,14 @@ public class Account {
 
     public void setAccountIdentifier(String accountIdentifier) {
         this.accountIdentifier = accountIdentifier;
+    }
+
+    public AccountStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AccountStatus status) {
+        this.status = status;
     }
 
     @Override
@@ -28,12 +37,15 @@ public class Account {
 
         if (accountIdentifier != null ? !accountIdentifier.equals(account.accountIdentifier) : account.accountIdentifier != null)
             return false;
+        if (status != account.status) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return accountIdentifier != null ? accountIdentifier.hashCode() : 0;
+        int result = accountIdentifier != null ? accountIdentifier.hashCode() : 0;
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        return result;
     }
 }

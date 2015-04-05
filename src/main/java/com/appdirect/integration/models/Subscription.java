@@ -2,10 +2,13 @@ package com.appdirect.integration.models;
 
 import com.appdirect.integration.models.events.common.Order;
 
+import static com.appdirect.integration.models.SubscriptionStatus.ACTIVE;
+
 public class Subscription {
     private String id;
     private String companyName;
     private Order order;
+    private SubscriptionStatus status = ACTIVE;
 
     public String getId() {
         return id;
@@ -29,6 +32,14 @@ public class Subscription {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public SubscriptionStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(SubscriptionStatus status) {
+        this.status = status;
     }
 
     @Override
