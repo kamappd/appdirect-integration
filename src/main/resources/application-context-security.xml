@@ -13,9 +13,8 @@
     <http pattern="/css/**" security="none"/>
     <http pattern="/javascript/**" security="none"/>
 
-    <!-- OAuth 1.0 2-Legged Security -->
-    <http pattern="/api/**" use-expressions="true" create-session="never"
-          entry-point-ref="oauthProcessingFilterEntryPoint">
+    <http use-expressions="true" create-session="never"
+          entry-point-ref="entryPoint">
         <intercept-url pattern="/api/**" access="hasRole('ROLE_OAUTH')"/>
         <intercept-url pattern="/**" access="ROLE_USER"/>
 
@@ -59,7 +58,7 @@
         <authentication-provider user-service-ref="userService"/>
     </authentication-manager>
 
-    <authentication-manager alias="authenticationManager"/>
+    <!--<authentication-manager alias="authenticationManager"/>-->
 
     <b:bean id="oauthProcessingFilterEntryPoint" class="com.appdirect.integration.security.oauth.OAuthProcessingFilterEntryPointImpl"/>
     <b:bean id="oAuthAuthenticationHandler"
