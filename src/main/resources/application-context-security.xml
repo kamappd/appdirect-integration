@@ -13,8 +13,7 @@
     <http pattern="/css/**" security="none"/>
     <http pattern="/javascript/**" security="none"/>
 
-    <http use-expressions="true" create-session="never"
-          entry-point-ref="entryPoint">
+    <http entry-point-ref="entryPoint">
         <intercept-url pattern="/api/**" access="hasRole('ROLE_OAUTH')"/>
         <intercept-url pattern="/**" access="hasRole('ROLE_USER')"/>
 
