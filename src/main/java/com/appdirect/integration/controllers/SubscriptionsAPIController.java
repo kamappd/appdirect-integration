@@ -79,6 +79,7 @@ public class SubscriptionsAPIController {
 
         logger.info("{}", eventData);
         String accountIdentifier = eventData.getPayload().getAccount().getAccountIdentifier();
+        userService.deleteAllFromCompany(accountIdentifier);
         companyService.delete(accountIdentifier);
         eventsService.saveEvent(eventData);
         return new SuccessResponseMessage("toto", null);

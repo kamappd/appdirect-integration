@@ -44,4 +44,8 @@ public class UserService implements UserDetailsService {
         logger.info("Loading user with openId {}", username);
         return userRepository.findByOpenId(username);
     }
+
+    public void deleteAllFromCompany(String accountIdentifier) {
+        userRepository.deleteAllFromCompany(accountIdentifier);
+    }
 }

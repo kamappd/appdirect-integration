@@ -19,7 +19,7 @@
         <intercept-url pattern="/**" access="hasRole('ROLE_USER')"/>
 
         <openid-login login-processing-url="/login-openid"
-                      default-target-url="/main.html"
+                      default-target-url="/index.html"
                       always-use-default-target="true">
             <!--<attribute-exchange>-->
                 <!--<openid-attribute name="uuid" type="https://www.appdirect.com/schema/user/uuid" required="true"/>-->
