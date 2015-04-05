@@ -61,14 +61,6 @@ public class SubscriptionsAPIController {
         return new SuccessResponseMessage("toto", id);
     }
 
-    private Subscription createSubscription(CreateSubscriptionOrderEvent eventData) {
-        Subscription subscription = new Subscription();
-        subscription.setId(eventData.getPayload().getCompany().getUuid());
-        subscription.setCompanyName(eventData.getPayload().getCompany().getName());
-        subscription.setOrder(eventData.getPayload().getOrder());
-        return subscription;
-    }
-
     @RequestMapping(value = "/change", method = GET, produces = APPLICATION_XML_VALUE)
     @ResponseBody
     public ResponseMessage handleChangeSubscriptionOrderEvent(@RequestParam("url") String url) throws IOException, JAXBException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthMessageSignerException {
@@ -80,6 +72,7 @@ public class SubscriptionsAPIController {
 
         logger.info("{}", eventData);
         subscriptionsService.update(eventData.getPayload().getAccount().getAccountIdentifier(), eventData.getPayload().getOrder());
+        eventsService.saveEvent(eventData);
         return new SuccessResponseMessage("toto", "1234");
     }
 
@@ -94,6 +87,7 @@ public class SubscriptionsAPIController {
 
         logger.info("{}", eventData);
         subscriptionsService.delete(eventData.getPayload().getAccount().getAccountIdentifier());
+        eventsService.saveEvent(eventData);
         return new SuccessResponseMessage("toto", "1234");
     }
 
@@ -112,5 +106,13 @@ public class SubscriptionsAPIController {
 
         subscriptionsService.changeStatus(eventData.getPayload().getAccount().getAccountIdentifier(), subscriptionStatus);
         return new SuccessResponseMessage("toto", "1234");
+    }
+
+    private Subscription createSubscription(CreateSubscriptionOrderEvent eventData) {
+        Subscription subscription = new Subscription();
+        subscription.setId(eventData.getPayload().getCompany().getUuid());
+        subscription.setCompanyName(eventData.getPayload().getCompany().getName());
+        subscription.setOrder(eventData.getPayload().getOrder());
+        return subscription;
     }
 }
