@@ -1,7 +1,7 @@
 package com.appdirect.integration.services;
 
 import com.appdirect.integration.models.Subscription;
-import com.appdirect.integration.models.events.EditionType;
+import com.appdirect.integration.models.events.EditionCode;
 import com.appdirect.integration.models.events.Order;
 import com.appdirect.integration.models.events.OrderItem;
 import com.appdirect.integration.models.events.OrderUnit;
@@ -12,8 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static com.appdirect.integration.models.events.EditionType.BASIC;
-import static com.appdirect.integration.models.events.EditionType.PREMIUM;
+import static com.appdirect.integration.models.events.EditionCode.BASIC;
+import static com.appdirect.integration.models.events.EditionCode.PREMIUM;
 import static com.appdirect.integration.models.events.OrderUnit.MEGABYTE;
 import static com.appdirect.integration.models.events.OrderUnit.USER;
 import static java.util.Arrays.asList;
@@ -92,9 +92,9 @@ public class SubscriptionsServiceTest {
         return anOrder(PREMIUM, 25, 250);
     }
 
-    private Order anOrder(EditionType editionType, int quantityUser, int quantityMegabyte) {
+    private Order anOrder(EditionCode editionCode, int quantityUser, int quantityMegabyte) {
         Order order = new Order();
-        order.setEditionCode(editionType);
+        order.setEditionCode(editionCode);
         order.setItems(asList(anOrderItem(quantityUser, USER), anOrderItem(quantityMegabyte, MEGABYTE)));
         return order;
     }

@@ -1,5 +1,5 @@
 package com.appdirect.integration.models.events;
 
-public enum EditionType {
-    BASIC, PREMIUM
+public enum EditionCode {
+    FREE, BASIC, PREMIUM
 }
