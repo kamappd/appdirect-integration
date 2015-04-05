@@ -3,18 +3,23 @@
 angular.module('app.controllers', []);
 var app = angular.module('app', [
   //'app.controllers',
-  'ngWebsocket',
   'ngRoute'
 ]);
 
 
-app.controller('EventsController', ['$scope', '$location', '$http', '$websocket',
-    function ($scope, $location, $http, $websocket) {
+app.controller('EventsController', ['$scope', '$location', '$http',
+    function ($scope, $location, $http) {
+      $scope.subscriptions = [];
       $scope.events = [];
+
+      $http.get('/events')
+        .success(function(data) {
+          $scope.events = data;
+        });
 
       $http.get('/subscriptions')
         .success(function(data) {
-          $scope.events = data;
+          $scope.subscriptions = data;
         });
 
       //console.log("toto");
