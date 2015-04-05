@@ -1,10 +1,10 @@
 package com.appdirect.integration.services;
 
 import com.appdirect.integration.models.Subscription;
-import com.appdirect.integration.models.events.common.EditionType;
-import com.appdirect.integration.models.events.common.Order;
-import com.appdirect.integration.models.events.common.OrderItem;
-import com.appdirect.integration.models.events.common.OrderUnit;
+import com.appdirect.integration.models.events.EditionType;
+import com.appdirect.integration.models.events.Order;
+import com.appdirect.integration.models.events.OrderItem;
+import com.appdirect.integration.models.events.OrderUnit;
 import com.appdirect.integration.utils.IdGenerator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,10 +12,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static com.appdirect.integration.models.events.common.EditionType.BASIC;
-import static com.appdirect.integration.models.events.common.EditionType.PREMIUM;
-import static com.appdirect.integration.models.events.common.OrderUnit.MEGABYTE;
-import static com.appdirect.integration.models.events.common.OrderUnit.USER;
+import static com.appdirect.integration.models.events.EditionType.BASIC;
+import static com.appdirect.integration.models.events.EditionType.PREMIUM;
+import static com.appdirect.integration.models.events.OrderUnit.MEGABYTE;
+import static com.appdirect.integration.models.events.OrderUnit.USER;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;

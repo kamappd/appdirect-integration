@@ -1,16 +1,15 @@
 package com.appdirect.integration.utils;
 
 import com.appdirect.integration.models.events.*;
-import com.appdirect.integration.models.events.common.*;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 
+import static com.appdirect.integration.models.events.AccountStatus.FREE_TRIAL_EXPIRED;
 import static com.appdirect.integration.models.events.EventType.*;
 import static com.appdirect.integration.models.events.NoticeType.DEACTIVATED;
-import static com.appdirect.integration.models.events.common.AccountStatus.FREE_TRIAL_EXPIRED;
-import static com.appdirect.integration.models.events.common.OrderUnit.MEGABYTE;
-import static com.appdirect.integration.models.events.common.OrderUnit.USER;
+import static com.appdirect.integration.models.events.OrderUnit.MEGABYTE;
+import static com.appdirect.integration.models.events.OrderUnit.USER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.hamcrest.core.Is.is;

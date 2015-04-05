@@ -1,4 +1,4 @@
-package com.appdirect.integration.models.events.common;
+package com.appdirect.integration.models.events;
 
 
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -47,5 +47,13 @@ public class MarketPlace {
         int result = partner != null ? partner.hashCode() : 0;
         result = 31 * result + (baseUrl != null ? baseUrl.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "MarketPlace{" +
+                "partner='" + partner + '\'' +
+                ", baseUrl='" + baseUrl + '\'' +
+                '}';
     }
 }

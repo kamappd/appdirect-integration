@@ -34,4 +34,11 @@ public class Notice {
     public int hashCode() {
         return type != null ? type.hashCode() : 0;
     }
+
+    @Override
+    public String toString() {
+        return "Notice{" +
+                "type=" + type +
+                '}';
+    }
 }

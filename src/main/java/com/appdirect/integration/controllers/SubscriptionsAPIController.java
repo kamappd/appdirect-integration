@@ -56,9 +56,9 @@ public class SubscriptionsAPIController {
 
         logger.info("{}", eventData);
         Subscription subscription = createSubscription(eventData);
-        String id = subscriptionsService.save(subscription);
+        String accountIdentifier = subscriptionsService.save(subscription);
         eventsService.saveEvent(eventData);
-        return new SuccessResponseMessage("toto", id);
+        return new SuccessResponseMessage("toto", accountIdentifier);
     }
 
     @RequestMapping(value = "/change", method = GET, produces = APPLICATION_XML_VALUE)
@@ -71,9 +71,10 @@ public class SubscriptionsAPIController {
         }
 
         logger.info("{}", eventData);
-        subscriptionsService.update(eventData.getPayload().getAccount().getAccountIdentifier(), eventData.getPayload().getOrder());
+        String accountIdentifier = eventData.getPayload().getAccount().getAccountIdentifier();
+        subscriptionsService.update(accountIdentifier, eventData.getPayload().getOrder());
         eventsService.saveEvent(eventData);
-        return new SuccessResponseMessage("toto", "1234");
+        return new SuccessResponseMessage("toto", accountIdentifier);
     }
 
     @RequestMapping(value = "/cancel", method = GET, produces = APPLICATION_XML_VALUE)
@@ -86,9 +87,10 @@ public class SubscriptionsAPIController {
         }
 
         logger.info("{}", eventData);
-        subscriptionsService.delete(eventData.getPayload().getAccount().getAccountIdentifier());
+        String accountIdentifier = eventData.getPayload().getAccount().getAccountIdentifier();
+        subscriptionsService.delete(accountIdentifier);
         eventsService.saveEvent(eventData);
-        return new SuccessResponseMessage("toto", "1234");
+        return new SuccessResponseMessage("toto", null);
     }
 
     @RequestMapping(value = "/status", method = GET, produces = APPLICATION_XML_VALUE)
@@ -101,11 +103,11 @@ public class SubscriptionsAPIController {
         }
 
         logger.info("{}", eventData);
-
+        String accountIdentifier = eventData.getPayload().getAccount().getAccountIdentifier();
         SubscriptionStatus subscriptionStatus = SubscriptionStatus.valueOf(eventData.getPayload().getNotice().getType().name());
 
-        subscriptionsService.changeStatus(eventData.getPayload().getAccount().getAccountIdentifier(), subscriptionStatus);
-        return new SuccessResponseMessage("toto", "1234");
+        subscriptionsService.changeStatus(accountIdentifier, subscriptionStatus);
+        return new SuccessResponseMessage("toto", accountIdentifier);
     }
 
     private Subscription createSubscription(CreateSubscriptionOrderEvent eventData) {

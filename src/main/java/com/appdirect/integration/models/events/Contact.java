@@ -1,4 +1,4 @@
-package com.appdirect.integration.models.events.common;
+package com.appdirect.integration.models.events;
 
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -82,5 +82,16 @@ public class Contact {
         result = 31 * result + (openId != null ? openId.hashCode() : 0);
         result = 31 * result + (language != null ? language.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", openId='" + openId + '\'' +
+                ", language='" + language + '\'' +
+                '}';
     }
 }

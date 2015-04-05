@@ -1,4 +1,4 @@
-package com.appdirect.integration.models.events.common;
+package com.appdirect.integration.models.events;
 
 
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -47,5 +47,13 @@ public class Account {
         int result = accountIdentifier != null ? accountIdentifier.hashCode() : 0;
         result = 31 * result + (status != null ? status.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "accountIdentifier='" + accountIdentifier + '\'' +
+                ", status=" + status +
+                '}';
     }
 }

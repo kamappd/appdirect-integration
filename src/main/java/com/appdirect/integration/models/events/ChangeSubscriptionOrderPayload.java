@@ -1,8 +1,5 @@
 package com.appdirect.integration.models.events;
 
-import com.appdirect.integration.models.events.common.Account;
-import com.appdirect.integration.models.events.common.Order;
-
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
@@ -29,5 +26,13 @@ public class ChangeSubscriptionOrderPayload {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    @Override
+    public String toString() {
+        return "ChangeSubscriptionOrderPayload{" +
+                "account=" + account +
+                ", order=" + order +
+                '}';
     }
 }

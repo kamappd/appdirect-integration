@@ -1,7 +1,5 @@
 package com.appdirect.integration.models.events;
 
-import com.appdirect.integration.models.events.common.Account;
-
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
@@ -18,5 +16,12 @@ public class CancelSubscriptionOrderPayload {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    @Override
+    public String toString() {
+        return "CancelSubscriptionOrderPayload{" +
+                "account=" + account +
+                '}';
     }
 }

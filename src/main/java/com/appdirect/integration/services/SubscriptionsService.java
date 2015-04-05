@@ -2,7 +2,7 @@ package com.appdirect.integration.services;
 
 import com.appdirect.integration.models.Subscription;
 import com.appdirect.integration.models.SubscriptionStatus;
-import com.appdirect.integration.models.events.common.Order;
+import com.appdirect.integration.models.events.Order;
 import com.appdirect.integration.utils.IdGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class SubscriptionsService {
         String id = idGenerator.generateId();
         subscription.setId(id);
         subscriptions.put(id, subscription);
-        return id;
+        return subscription;
     }
 
     public List<Subscription> getSubscriptions() {

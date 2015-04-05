@@ -1,8 +1,5 @@
 package com.appdirect.integration.models.events;
 
-import com.appdirect.integration.models.events.common.Company;
-import com.appdirect.integration.models.events.common.Order;
-
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
@@ -49,5 +46,13 @@ public class CreateSubscriptionOrderPayload {
         int result = company != null ? company.hashCode() : 0;
         result = 31 * result + (order != null ? order.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "CreateSubscriptionOrderPayload{" +
+                "company=" + company +
+                ", order=" + order +
+                '}';
     }
 }

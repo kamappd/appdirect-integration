@@ -1,6 +1,6 @@
 package com.appdirect.integration.models;
 
-import com.appdirect.integration.models.events.common.Order;
+import com.appdirect.integration.models.events.Order;
 
 import static com.appdirect.integration.models.SubscriptionStatus.ACTIVE;
 

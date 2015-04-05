@@ -1,4 +1,4 @@
-package com.appdirect.integration.models.events.common;
+package com.appdirect.integration.models.events;
 
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -82,5 +82,16 @@ public class Company {
         result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
         result = 31 * result + (website != null ? website.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Company{" +
+                "uuid='" + uuid + '\'' +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", website='" + website + '\'' +
+                '}';
     }
 }

@@ -1,7 +1,5 @@
 package com.appdirect.integration.models.events;
 
-import com.appdirect.integration.models.events.common.Contact;
-import com.appdirect.integration.models.events.common.MarketPlace;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -71,5 +69,15 @@ public abstract class Event<T> {
         result = 31 * result + (creator != null ? creator.hashCode() : 0);
         result = 31 * result + (payload != null ? payload.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "type=" + type +
+                ", marketplace=" + marketplace +
+                ", creator=" + creator +
+                ", payload=" + payload +
+                '}';
     }
 }
