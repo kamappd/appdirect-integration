@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import javax.transaction.Transactional.TxType;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -45,6 +47,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findByOpenId(username);
     }
 
+    @Transactional(TxType.REQUIRES_NEW)
     public void deleteAllFromCompany(String accountIdentifier) {
         userRepository.deleteAllFromCompany(accountIdentifier);
     }
