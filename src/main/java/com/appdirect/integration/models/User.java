@@ -24,15 +24,12 @@ public class User extends AbstractModel<User> implements UserDetails {
 
     @Column(unique = true)
     private String openId;
-    @Basic
     @Column(unique = true)
     private String email;
 
     @ManyToOne
     @JoinColumn(name = "company")
     private Company company;
-
-    @Basic
     @Column
     @JsonIgnore
     private String password;
