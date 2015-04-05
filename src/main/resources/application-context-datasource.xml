@@ -1,10 +1,12 @@
 <beans
         xmlns="http://www.springframework.org/schema/beans"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:util="http://www.springframework.org/schema/util"
         xmlns:jpa="http://www.springframework.org/schema/data/jpa"
         xmlns:tx="http://www.springframework.org/schema/tx"
         xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
         http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
@@ -16,6 +18,10 @@
         <property name="url" value="jdbc:hsqldb:mem:appDirectInt"/>
         <property name="username" value="sa"/>
         <property name="password" value=""/>
+        <property name="defaultTransactionIsolation">
+            <util:constant static-field="java.sql.Connection.TRANSACTION_READ_COMMITTED"/>
+        </property>
+
     </bean>
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
@@ -34,7 +40,7 @@
         <property name="jpaProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
-                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.show_sql">false</prop>
                 <prop key="hibernate.format_sql">false</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
             </props>
