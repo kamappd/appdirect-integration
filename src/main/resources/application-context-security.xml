@@ -32,7 +32,7 @@
                 <!--&lt;!&ndash;<openid-attribute name="fullname" type="http://axschema.org/namePerson" required="true"/>&ndash;&gt;-->
                 <!--&lt;!&ndash;<openid-attribute name="language" type="http://axschema.org/pref/language" required="true"/>&ndash;&gt;-->
                 <!--&lt;!&ndash;<openid-attribute name="companyUuid" type="https://www.appdirect.com/schema/company/uuid" required="true"/>&ndash;&gt;-->
-                <!--&lt;!&ndash;<openid-attribute name="companyName" type="http://axschema.org/company/name" required="true"/>&ndash;&gt;-->
+                <!--&lt;!&ndash;<openid-attribute name="name" type="http://axschema.org/company/name" required="true"/>&ndash;&gt;-->
                 <!--&lt;!&ndash;<openid-attribute name="position" type="http://axschema.org/company/title" required="true"/>&ndash;&gt;-->
             <!--&lt;!&ndash;</attribute-exchange>&ndash;&gt;-->
         <!--</openid-login>-->

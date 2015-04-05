@@ -29,7 +29,7 @@
             </thead>
             <tr ng-repeat="subscription in subscriptions">
                 <td>{{subscription.status}}</td>
-                <td>{{subscription.companyName}}</td>
+                <td>{{subscription.name}}</td>
                 <td>{{subscription.editionCode}}</td>
                 <td><span ng-if="$middle">, </span><span ng-repeat="item in subscription.order.items">{{item.quantity}} {{item.unit}} </span>
                 </td>

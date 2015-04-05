@@ -1,5 +1,7 @@
 package com.appdirect.integration.models.events;
 
+import com.appdirect.integration.models.EditionCode;
+
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import java.util.List;

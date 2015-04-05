@@ -1,13 +1,12 @@
 package com.appdirect.integration.controllers;
 
+import com.appdirect.integration.models.Company;
 import com.appdirect.integration.models.*;
-import com.appdirect.integration.models.events.CancelSubscriptionOrderEvent;
-import com.appdirect.integration.models.events.ChangeSubscriptionOrderEvent;
-import com.appdirect.integration.models.events.CreateSubscriptionOrderEvent;
-import com.appdirect.integration.models.events.StatusSubscriptionOrderEvent;
+import com.appdirect.integration.models.events.*;
+import com.appdirect.integration.services.CompanyService;
 import com.appdirect.integration.services.EventDataRetrieverService;
 import com.appdirect.integration.services.EventsService;
-import com.appdirect.integration.services.SubscriptionsService;
+import com.appdirect.integration.services.UserService;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
 
-import static com.appdirect.integration.models.ResponseErrorCode.ACCOUNT_NOT_FOUND;
 import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
@@ -35,13 +33,15 @@ public class SubscriptionsAPIController {
 
     private static final Logger logger = LoggerFactory.getLogger(SubscriptionsAPIController.class);
     private EventDataRetrieverService eventDataRetrieverService;
-    private SubscriptionsService subscriptionsService;
+    private CompanyService companyService;
+    private UserService userService;
     private EventsService eventsService;
 
     @Autowired
-    public SubscriptionsAPIController(EventDataRetrieverService eventDataRetrieverService, SubscriptionsService subscriptionsService, EventsService eventsService) {
+    public SubscriptionsAPIController(EventDataRetrieverService eventDataRetrieverService, CompanyService companyService, UserService userService, EventsService eventsService) {
         this.eventDataRetrieverService = eventDataRetrieverService;
-        this.subscriptionsService = subscriptionsService;
+        this.companyService = companyService;
+        this.userService = userService;
         this.eventsService = eventsService;
     }
 
@@ -50,13 +50,11 @@ public class SubscriptionsAPIController {
     public ResponseMessage handleCreateSubscriptionOrderEvent(@RequestParam("url") String url) throws IOException, JAXBException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthMessageSignerException {
         CreateSubscriptionOrderEvent eventData = eventDataRetrieverService.getEventData(url, CreateSubscriptionOrderEvent.class);
 
-        if (eventData == null) {
-            new ErrorResponseMessage(ACCOUNT_NOT_FOUND, "toto");
-        }
-
         logger.info("{}", eventData);
-        Subscription subscription = createSubscription(eventData);
-        String accountIdentifier = subscriptionsService.save(subscription);
+        Company company = createCompany(eventData);
+        User user = createUser(eventData.getCreator(), company);
+        String accountIdentifier = companyService.save(company);
+        userService.save(user);
         eventsService.saveEvent(eventData);
         return new SuccessResponseMessage("toto", accountIdentifier);
     }
@@ -66,13 +64,10 @@ public class SubscriptionsAPIController {
     public ResponseMessage handleChangeSubscriptionOrderEvent(@RequestParam("url") String url) throws IOException, JAXBException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthMessageSignerException {
         ChangeSubscriptionOrderEvent eventData = eventDataRetrieverService.getEventData(url, ChangeSubscriptionOrderEvent.class);
 
-        if (eventData == null) {
-            new ErrorResponseMessage(ACCOUNT_NOT_FOUND, "toto");
-        }
-
         logger.info("{}", eventData);
         String accountIdentifier = eventData.getPayload().getAccount().getAccountIdentifier();
-        subscriptionsService.update(accountIdentifier, eventData.getPayload().getOrder());
+        EditionCode editionCode = eventData.getPayload().getOrder().getEditionCode();
+        companyService.update(accountIdentifier, editionCode);
         eventsService.saveEvent(eventData);
         return new SuccessResponseMessage("toto", accountIdentifier);
     }
@@ -82,13 +77,9 @@ public class SubscriptionsAPIController {
     public ResponseMessage handleCancelSubscriptionOrderEvent(@RequestParam("url") String url) throws IOException, JAXBException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthMessageSignerException {
         CancelSubscriptionOrderEvent eventData = eventDataRetrieverService.getEventData(url, CancelSubscriptionOrderEvent.class);
 
-        if (eventData == null) {
-            new ErrorResponseMessage(ACCOUNT_NOT_FOUND, "toto");
-        }
-
         logger.info("{}", eventData);
         String accountIdentifier = eventData.getPayload().getAccount().getAccountIdentifier();
-        subscriptionsService.delete(accountIdentifier);
+        companyService.delete(accountIdentifier);
         eventsService.saveEvent(eventData);
         return new SuccessResponseMessage("toto", null);
     }
@@ -98,24 +89,28 @@ public class SubscriptionsAPIController {
     public ResponseMessage handleStatusSubscriptionOrderEvent(@RequestParam("url") String url) throws IOException, JAXBException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthMessageSignerException {
         StatusSubscriptionOrderEvent eventData = eventDataRetrieverService.getEventData(url, StatusSubscriptionOrderEvent.class);
 
-        if (eventData == null) {
-            new ErrorResponseMessage(ACCOUNT_NOT_FOUND, "toto");
-        }
-
         logger.info("{}", eventData);
         String accountIdentifier = eventData.getPayload().getAccount().getAccountIdentifier();
         SubscriptionStatus subscriptionStatus = SubscriptionStatus.valueOf(eventData.getPayload().getNotice().getType().name());
 
-        subscriptionsService.changeStatus(accountIdentifier, subscriptionStatus);
+        companyService.changeStatus(accountIdentifier, subscriptionStatus);
         return new SuccessResponseMessage("toto", accountIdentifier);
     }
 
-    private Subscription createSubscription(CreateSubscriptionOrderEvent eventData) {
-        Subscription subscription = new Subscription();
-        subscription.setId(eventData.getPayload().getCompany().getUuid());
-        subscription.setCompanyName(eventData.getPayload().getCompany().getName());
-        subscription.setOrder(eventData.getPayload().getOrder());
-        subscription.setEditionCode(eventData.getPayload().getOrder().getEditionCode());
-        return subscription;
+    private Company createCompany(CreateSubscriptionOrderEvent eventData) {
+        Company company = new Company();
+        company.setName(eventData.getPayload().getCompany().getName());
+        company.setEditionCode(eventData.getPayload().getOrder().getEditionCode());
+        return company;
+    }
+
+    private User createUser(Contact contact, Company company) {
+        User user = new User();
+        user.setCompany(company);
+        user.setEmail(contact.getEmail());
+        user.setFirstName(contact.getFirstName());
+        user.setLastName(contact.getLastName());
+        user.setOpenId(contact.getOpenId());
+        return user;
     }
 }
