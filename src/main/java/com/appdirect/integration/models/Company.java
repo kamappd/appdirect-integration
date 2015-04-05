@@ -1,5 +1,6 @@
 package com.appdirect.integration.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.LazyCollection;
 
 import javax.persistence.CascadeType;
@@ -18,6 +19,7 @@ public class Company extends AbstractModel<Company> {
     private SubscriptionStatus status = ACTIVE;
     private EditionCode editionCode;
     @LazyCollection(TRUE)
+    @JsonIgnore
     @OneToMany(cascade= CascadeType.ALL, mappedBy="company")
     private List<User> users;
 
