@@ -14,8 +14,6 @@ import com.appdirect.integration.services.UserService;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -35,7 +33,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @RequestMapping("/api/events/assignment")
 public class AppDirectAssignmentController {
 
-    private static final Logger logger = LoggerFactory.getLogger(AppDirectAssignmentController.class);
     private EventDataRetrieverService eventDataRetrieverService;
     private CompanyService companyService;
     private UserService userService;
@@ -51,10 +48,9 @@ public class AppDirectAssignmentController {
 
     @RequestMapping(value = "/assign", method = GET, produces = APPLICATION_XML_VALUE)
     @ResponseBody
-    public ResponseMessage handleCreateSubscriptionOrderEvent(@RequestParam("url") String url) throws IOException, JAXBException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthMessageSignerException {
+    public ResponseMessage handleUserAssignmentEvent(@RequestParam("url") String url) throws IOException, JAXBException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthMessageSignerException {
         UserAssignmentEvent eventData = eventDataRetrieverService.getEventData(url, UserAssignmentEvent.class);
 
-        logger.info("{}", eventData);
         String accountIdentifier = eventData.getPayload().getAccount().getAccountIdentifier();
         Company company = companyService.getCompany(accountIdentifier);
         User user = createUser(eventData.getPayload().getUser(), company);
@@ -65,7 +61,7 @@ public class AppDirectAssignmentController {
 
     @RequestMapping(value = "/unassign", method = GET, produces = APPLICATION_XML_VALUE)
     @ResponseBody
-    public ResponseMessage handleCancelSubscriptionOrderEvent(@RequestParam("url") String url) throws IOException, JAXBException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthMessageSignerException {
+    public ResponseMessage handlUserUnassignmentEvent(@RequestParam("url") String url) throws IOException, JAXBException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthMessageSignerException {
         UserUnassignmentEvent eventData = eventDataRetrieverService.getEventData(url, UserUnassignmentEvent.class);
 
         String userOpenId = eventData.getPayload().getUser().getOpenId();

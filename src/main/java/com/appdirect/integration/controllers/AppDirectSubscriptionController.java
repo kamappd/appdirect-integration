@@ -10,8 +10,6 @@ import com.appdirect.integration.services.UserService;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -31,7 +29,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @RequestMapping("/api/events/subscriptions")
 public class AppDirectSubscriptionController {
 
-    private static final Logger logger = LoggerFactory.getLogger(AppDirectSubscriptionController.class);
     private EventDataRetrieverService eventDataRetrieverService;
     private CompanyService companyService;
     private UserService userService;
@@ -50,13 +47,12 @@ public class AppDirectSubscriptionController {
     public ResponseMessage handleCreateSubscriptionOrderEvent(@RequestParam("url") String url) throws IOException, JAXBException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthMessageSignerException {
         CreateSubscriptionOrderEvent eventData = eventDataRetrieverService.getEventData(url, CreateSubscriptionOrderEvent.class);
 
-        logger.info("{}", eventData);
         Company company = createCompany(eventData);
         User user = createUser(eventData.getCreator(), company);
         String accountIdentifier = companyService.save(company);
         userService.save(user);
         eventsService.saveEvent(eventData);
-        return new SuccessResponseMessage("toto", accountIdentifier);
+        return new SuccessResponseMessage(accountIdentifier);
     }
 
     @RequestMapping(value = "/change", method = GET, produces = APPLICATION_XML_VALUE)
@@ -64,12 +60,11 @@ public class AppDirectSubscriptionController {
     public ResponseMessage handleChangeSubscriptionOrderEvent(@RequestParam("url") String url) throws IOException, JAXBException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthMessageSignerException {
         ChangeSubscriptionOrderEvent eventData = eventDataRetrieverService.getEventData(url, ChangeSubscriptionOrderEvent.class);
 
-        logger.info("{}", eventData);
         String accountIdentifier = eventData.getPayload().getAccount().getAccountIdentifier();
         EditionCode editionCode = eventData.getPayload().getOrder().getEditionCode();
         companyService.updateEdition(accountIdentifier, editionCode);
         eventsService.saveEvent(eventData);
-        return new SuccessResponseMessage("toto", accountIdentifier);
+        return new SuccessResponseMessage(accountIdentifier);
     }
 
     @RequestMapping(value = "/cancel", method = GET, produces = APPLICATION_XML_VALUE)
@@ -77,11 +72,10 @@ public class AppDirectSubscriptionController {
     public ResponseMessage handleCancelSubscriptionOrderEvent(@RequestParam("url") String url) throws IOException, JAXBException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthMessageSignerException {
         CancelSubscriptionOrderEvent eventData = eventDataRetrieverService.getEventData(url, CancelSubscriptionOrderEvent.class);
 
-        logger.info("{}", eventData);
         String accountIdentifier = eventData.getPayload().getAccount().getAccountIdentifier();
         companyService.delete(accountIdentifier);
         eventsService.saveEvent(eventData);
-        return new SuccessResponseMessage("toto", null);
+        return new SuccessResponseMessage();
     }
 
     @RequestMapping(value = "/status", method = GET, produces = APPLICATION_XML_VALUE)
@@ -89,12 +83,12 @@ public class AppDirectSubscriptionController {
     public ResponseMessage handleStatusSubscriptionOrderEvent(@RequestParam("url") String url) throws IOException, JAXBException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthMessageSignerException {
         StatusSubscriptionOrderEvent eventData = eventDataRetrieverService.getEventData(url, StatusSubscriptionOrderEvent.class);
 
-        logger.info("{}", eventData);
         String accountIdentifier = eventData.getPayload().getAccount().getAccountIdentifier();
         SubscriptionStatus subscriptionStatus = SubscriptionStatus.valueOf(eventData.getPayload().getNotice().getType().name());
 
         companyService.changeStatus(accountIdentifier, subscriptionStatus);
-        return new SuccessResponseMessage("toto", accountIdentifier);
+        eventsService.saveEvent(eventData);
+        return new SuccessResponseMessage(accountIdentifier);
     }
 
     private Company createCompany(CreateSubscriptionOrderEvent eventData) {

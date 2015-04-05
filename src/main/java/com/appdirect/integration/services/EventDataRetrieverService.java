@@ -37,7 +37,6 @@ public class EventDataRetrieverService {
 
                     return eventParser.parse(response.getEntity().getContent(), eventClass);
                 }
-
             }
         }
         return null;

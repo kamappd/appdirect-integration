@@ -1,6 +1,5 @@
 package com.appdirect.integration.services;
 
-import com.appdirect.integration.models.events.CreateSubscriptionOrderEvent;
 import com.appdirect.integration.models.events.Event;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
@@ -11,6 +10,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This is only for the demo.
+ */
 @Service
 public class EventsService {
 
@@ -30,10 +32,6 @@ public class EventsService {
 
     public List<Event> getEvents() {
         return new ArrayList<>(this.events);
-    }
-
-    public void createFakeEvent() {
-        events.add(new CreateSubscriptionOrderEvent());
     }
 
     public void saveEvent(Event event) {

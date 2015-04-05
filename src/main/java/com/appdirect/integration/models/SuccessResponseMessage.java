@@ -18,9 +18,8 @@ public class SuccessResponseMessage extends ResponseMessage {
         this.success = true;
     }
 
-    public SuccessResponseMessage(String message, String accountIdentifier) {
+    public SuccessResponseMessage(String accountIdentifier) {
         this();
-        this.message = message;
         this.accountIdentifier = accountIdentifier;
     }
 
