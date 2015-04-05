@@ -20,7 +20,7 @@ public class Company extends AbstractModel<Company> {
     private EditionCode editionCode;
     @LazyCollection(TRUE)
     @JsonIgnore
-    @OneToMany(cascade= CascadeType.ALL, mappedBy="companyId")
+    @OneToMany(cascade= CascadeType.ALL, mappedBy="company")
     private List<User> users;
 
     public String getName() {
