@@ -44,7 +44,7 @@ public class SubscriptionsService {
         String id = idGenerator.generateId();
         subscription.setId(id);
         subscriptions.put(id, subscription);
-        return subscription;
+        return id;
     }
 
     public List<Subscription> getSubscriptions() {
