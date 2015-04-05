@@ -11,14 +11,14 @@
     <global-method-security pre-post-annotations="enabled"/>
 
     <!-- This is only for the demo purpose -->
-    <http pattern="/events" security="none"/>
-    <http pattern="/users" security="none"/>
-    <http pattern="/companies" security="none"/>
 
     <http use-expressions="true"
           entry-point-ref="entryPoint">
         <intercept-url pattern="/api/**" access="hasRole('ROLE_OAUTH')"/>
         <intercept-url pattern="/**" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/events" access="isAnonymous"/>
+        <intercept-url pattern="/users" access="isAnonymous"/>
+        <intercept-url pattern="/companies" access="isAnonymous"/>
 
         <openid-login login-processing-url="/login-openid"
                       default-target-url="/index.html"
