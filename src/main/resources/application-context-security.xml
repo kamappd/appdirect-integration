@@ -13,6 +13,11 @@
     <http pattern="/css/**" security="none"/>
     <http pattern="/javascript/**" security="none"/>
 
+    <!-- This is only for the demo purpose -->
+    <http pattern="/events" security="none"/>
+    <http pattern="/users" security="none"/>
+    <http pattern="/companies" security="none"/>
+
     <http use-expressions="true"
           entry-point-ref="entryPoint">
         <intercept-url pattern="/api/**" access="hasRole('ROLE_OAUTH')"/>
