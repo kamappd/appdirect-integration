@@ -22,15 +22,17 @@
         <table class="table table-striped subscribers-list">
             <thead>
             <tr>
+                <td>Status</td>
                 <td>Company</td>
                 <td>Edition</td>
                 <td>Items</td>
             </tr>
             </thead>
             <tr ng-repeat="subscription in subscriptions">
+                <td>{{subscription.status}}</td>
                 <td>{{subscription.companyName}}</td>
-                <td>{{subscriber.order.editionCode}}</td>
-                <td><span ng-if="$middle">, </span><span ng-repeat="item in subscriber.order.items">{{item.quantity}} {{item.unit}} </span>
+                <td>{{subscription.editionCode}}</td>
+                <td><span ng-if="$middle">, </span><span ng-repeat="item in subscription.order.items">{{item.quantity}} {{item.unit}} </span>
                 </td>
             </tr>
         </table>

@@ -1,5 +1,6 @@
 package com.appdirect.integration.models;
 
+import com.appdirect.integration.models.events.EditionCode;
 import com.appdirect.integration.models.events.Order;
 
 import static com.appdirect.integration.models.SubscriptionStatus.ACTIVE;
@@ -9,6 +10,7 @@ public class Subscription {
     private String companyName;
     private Order order;
     private SubscriptionStatus status = ACTIVE;
+    private EditionCode editionCode;
 
     public String getId() {
         return id;
@@ -42,6 +44,14 @@ public class Subscription {
         this.status = status;
     }
 
+    public EditionCode getEditionCode() {
+        return editionCode;
+    }
+
+    public void setEditionCode(EditionCode editionCode) {
+        this.editionCode = editionCode;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -64,6 +74,8 @@ public class Subscription {
                 "id='" + id + '\'' +
                 ", companyName='" + companyName + '\'' +
                 ", order=" + order +
+                ", status=" + status +
+                ", editionCode=" + editionCode +
                 '}';
     }
 }

@@ -115,6 +115,7 @@ public class SubscriptionsAPIController {
         subscription.setId(eventData.getPayload().getCompany().getUuid());
         subscription.setCompanyName(eventData.getPayload().getCompany().getName());
         subscription.setOrder(eventData.getPayload().getOrder());
+        subscription.setEditionCode(eventData.getPayload().getOrder().getEditionCode());
         return subscription;
     }
 }
