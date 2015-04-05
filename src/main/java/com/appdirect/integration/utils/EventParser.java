@@ -16,14 +16,15 @@ public class EventParser {
 
     public <T> T parse(InputStream content, Class<T> eventClass) throws JAXBException, IOException {
 
-        logContent(content);
-        content.reset();
+        String contentAsString = getContentAsString(content);
+        logger.info(contentAsString);
+
         JAXBContext context = JAXBContext.newInstance(eventClass);
         Unmarshaller unmarshaller = context.createUnmarshaller();
-        return (T) unmarshaller.unmarshal(content);
+        return (T) unmarshaller.unmarshal(new StringReader(contentAsString));
     }
 
-    private void logContent(InputStream content) throws UnsupportedEncodingException {
+    private String getContentAsString(InputStream content) throws UnsupportedEncodingException {
         final char[] buffer = new char[1024];
         final StringBuilder out = new StringBuilder();
         Reader in = new InputStreamReader(content, "UTF-8");
@@ -37,6 +38,6 @@ public class EventParser {
         } catch (IOException ignored) {
 
         }
-        logger.info(out.toString());
+        return out.toString();
     }
 }
