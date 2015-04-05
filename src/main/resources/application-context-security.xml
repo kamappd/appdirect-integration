@@ -17,10 +17,8 @@
     <http pattern="/api/**" use-expressions="true" create-session="never"
           entry-point-ref="oauthProcessingFilterEntryPoint">
         <intercept-url pattern="/api/**" access="hasRole('ROLE_OAUTH')"/>
-    </http>
-
-    <http pattern="/**">
         <intercept-url pattern="/**" access="ROLE_USER"/>
+
         <openid-login login-processing-url="/login-openid"
                       default-target-url="/main.html"
                       always-use-default-target="true">
@@ -37,6 +35,25 @@
             <!--</attribute-exchange>-->
         </openid-login>
     </http>
+
+    <b:bean id="entryPoint"
+          class="org.springframework.security.web.authentication.DelegatingAuthenticationEntryPoint">
+        <b:constructor-arg>
+            <b:map>
+                <b:entry key-ref="appDirectEntryPointMatcher" value-ref="oauthProcessingFilterEntryPoint"/>
+            </b:map>
+        </b:constructor-arg>
+
+        <b:property name="defaultEntryPoint" ref="webAppEntryPoint"/>
+    </b:bean>
+
+    <b:bean id="appDirectEntryPointMatcher"
+          class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">
+        <b:constructor-arg value="/api/**"/>
+    </b:bean>
+
+    <b:bean id="webAppEntryPoint"
+          class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint"/>
 
     <authentication-manager alias="authManager">
         <authentication-provider user-service-ref="userService"/>
