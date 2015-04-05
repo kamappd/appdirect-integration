@@ -19,10 +19,22 @@ import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
         discriminatorType= DiscriminatorType.STRING
 )
 public abstract class Event<T> {
+    @javax.persistence.Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private EventType type;
     private MarketPlace marketplace;
     private Contact creator;
     protected T payload;
+
+    @XmlElement
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     @XmlElement
     public EventType getType() {
