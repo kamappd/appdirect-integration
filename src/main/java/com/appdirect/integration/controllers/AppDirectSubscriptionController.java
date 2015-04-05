@@ -67,7 +67,7 @@ public class AppDirectSubscriptionController {
         logger.info("{}", eventData);
         String accountIdentifier = eventData.getPayload().getAccount().getAccountIdentifier();
         EditionCode editionCode = eventData.getPayload().getOrder().getEditionCode();
-        companyService.update(accountIdentifier, editionCode);
+        companyService.updateEdition(accountIdentifier, editionCode);
         eventsService.saveEvent(eventData);
         return new SuccessResponseMessage("toto", accountIdentifier);
     }

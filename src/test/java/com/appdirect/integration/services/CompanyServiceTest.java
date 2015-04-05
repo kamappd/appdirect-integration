@@ -5,15 +5,22 @@ import com.appdirect.integration.repositories.CompanyRepository;
 import com.appdirect.integration.utils.IdGenerator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static com.appdirect.integration.models.EditionCode.BASIC;
 import static com.appdirect.integration.models.EditionCode.PREMIUM;
+import static com.appdirect.integration.models.SubscriptionStatus.DEACTIVATED;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+/**
+ * I should also test error cases
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class CompanyServiceTest {
 
@@ -39,17 +46,21 @@ public class CompanyServiceTest {
     }
 
     @Test
-    public void can_update_existing_company() throws Exception {
+    public void can_update_edition_for_existing_company() throws Exception {
 
         // Given
-        Company company = givenACompanyAlreadyExists("1234");
+        givenACompanyAlreadyExists("1234");
 
         // Execute
-        companyService.update("1234", PREMIUM);
+        companyService.updateEdition("1234", PREMIUM);
 
         // Verify
-        company.setEditionCode(PREMIUM);
-        verify(companyRepository).save(company);
+        ArgumentCaptor<Company> companyArgumentCaptor = ArgumentCaptor.forClass(Company.class);
+        verify(companyRepository).save(companyArgumentCaptor.capture());
+
+        Company company = companyArgumentCaptor.getValue();
+        assertThat(company.getId(), is("1234"));
+        assertThat(company.getEditionCode(), is(PREMIUM));
     }
 
     @Test
@@ -63,6 +74,24 @@ public class CompanyServiceTest {
 
         // Verify
         verify(companyRepository).delete("1234");
+    }
+
+    @Test
+    public void can_update_status_for_existing_company() throws Exception {
+
+        // Given
+        givenACompanyAlreadyExists("1234");
+
+        // Execute
+        companyService.changeStatus("1234", DEACTIVATED);
+
+        // Verify
+        ArgumentCaptor<Company> companyArgumentCaptor = ArgumentCaptor.forClass(Company.class);
+        verify(companyRepository).save(companyArgumentCaptor.capture());
+
+        Company company = companyArgumentCaptor.getValue();
+        assertThat(company.getId(), is("1234"));
+        assertThat(company.getStatus(), is(DEACTIVATED));
     }
 
     private Company aBasicCompany(String id) {

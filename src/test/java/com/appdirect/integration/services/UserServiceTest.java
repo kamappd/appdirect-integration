@@ -14,6 +14,9 @@ import static com.appdirect.integration.models.EditionCode.BASIC;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+/**
+ * I should also test error cases
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
 
@@ -25,17 +28,27 @@ public class UserServiceTest {
     private UserRepository userRepository;
 
     @Test
-    public void when_receiving_new_order__add_subscription() throws Exception {
+    public void can_save_user() throws Exception {
 
         // Given
         when(idGenerator.generateId()).thenReturn("1234");
-        User user = aBasicUser("1234");
+        User user = aBasicUser("1234", "123456789");
 
         // Execute
         userService.save(user);
 
         // Verify
         verify(userRepository).save(user);
+    }
+
+    @Test
+    public void can_delete_user() throws Exception {
+
+        // Execute
+        userService.deleteByOpenId("123456789");
+
+        // Verify
+        verify(userRepository).deleteByOpenId("123456789");
     }
 
     private Company aBasicCompany() {
@@ -46,14 +59,14 @@ public class UserServiceTest {
         return company;
     }
 
-    private User aBasicUser(String id) {
+    private User aBasicUser(String id, String openId) {
         User user = new User();
         user.setId(id);
         user.setCompany(aBasicCompany());
         user.setEmail("john.doe@somewhere.net");
         user.setFirstName("john");
         user.setLastName("doe");
-        user.setOpenId("123456789");
+        user.setOpenId(openId);
         return user;
     }
 }

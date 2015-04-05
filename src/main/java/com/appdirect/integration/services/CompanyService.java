@@ -35,7 +35,7 @@ public class CompanyService {
         return newArrayList(companyRepository.findAll());
     }
 
-    public void update(String identifier, EditionCode editionCode) {
+    public void updateEdition(String identifier, EditionCode editionCode) {
         Company company = companyRepository.findOne(identifier);
         company.setEditionCode(editionCode);
         companyRepository.save(company);
