@@ -38,7 +38,7 @@
         <!--</openid-login>-->
     <!--</http>-->
 <!---->
-    <!--<authentication-manager alias="authenticationManager"/>-->
+    <authentication-manager alias="authenticationManager"/>
 
     <b:bean id="oauthProcessingFilterEntryPoint" class="com.appdirect.integration.security.oauth.OAuthProcessingFilterEntryPointImpl"/>
     <b:bean id="oAuthAuthenticationHandler"
