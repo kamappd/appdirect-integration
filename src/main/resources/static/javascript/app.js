@@ -9,17 +9,23 @@ var app = angular.module('app', [
 
 app.controller('EventsController', ['$scope', '$location', '$http',
     function ($scope, $location, $http) {
-      $scope.subscriptions = [];
+      $scope.companies = [];
+      $scope.users = [];
       $scope.events = [];
+
+      $http.get('/companies')
+        .success(function(data) {
+          $scope.companies = data;
+        });
+
+      $http.get('/users')
+        .success(function(data) {
+          $scope.users = data;
+        });
 
       $http.get('/events')
         .success(function(data) {
           $scope.events = data;
-        });
-
-      $http.get('/subscriptions')
-        .success(function(data) {
-          $scope.subscriptions = data;
         });
 
       //console.log("toto");

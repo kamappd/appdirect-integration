@@ -15,7 +15,7 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">Subscriptions</h3>
+        <h3 class="panel-title">Companies</h3>
     </div>
     <div class="panel-body">
         <table class="table table-striped subscriptions-list">
@@ -24,15 +24,36 @@
                 <td>Status</td>
                 <td>Company</td>
                 <td>Edition</td>
-                <td>Items</td>
             </tr>
             </thead>
-            <tr ng-repeat="subscription in subscriptions">
-                <td>{{subscription.status}}</td>
-                <td>{{subscription.name}}</td>
-                <td>{{subscription.editionCode}}</td>
-                <td><span ng-if="$middle">, </span><span ng-repeat="item in subscription.order.items">{{item.quantity}} {{item.unit}} </span>
-                </td>
+            <tr ng-repeat="company in companies">
+                <td>{{company.status}}</td>
+                <td>{{company.name}}</td>
+                <td>{{company.editionCode}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Users</h3>
+    </div>
+    <div class="panel-body">
+        <table class="table table-striped users-list">
+            <thead>
+            <tr>
+                <td>Firstname</td>
+                <td>Lastname</td>
+                <td>email</td>
+                <td>company</td>
+            </tr>
+            </thead>
+            <tr ng-repeat="user in users">
+                <td>{{user.firstname}}</td>
+                <td>{{user.lastname}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.company.name}}</td>
             </tr>
         </table>
     </div>
