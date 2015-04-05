@@ -13,7 +13,7 @@ import static com.appdirect.integration.models.SubscriptionStatus.ACTIVE;
 import static org.hibernate.annotations.LazyCollectionOption.TRUE;
 
 @Entity
-@Table(name = "app_company")
+@Table(name = "app_company", schema = "public")
 public class Company extends AbstractModel<Company> {
     private String name;
     private SubscriptionStatus status = ACTIVE;

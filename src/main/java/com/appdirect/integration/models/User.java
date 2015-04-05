@@ -11,7 +11,7 @@ import java.util.Collection;
 import static java.util.Arrays.asList;
 
 @Entity
-@Table(name = "app_user")
+@Table(name = "app_user", schema = "public")
 public class User extends AbstractModel<User> implements UserDetails {
     @Column
     private String firstName;
