@@ -14,12 +14,12 @@ public class SuccessResponseMessage extends ResponseMessage {
     @XmlElement
     private String accountIdentifier;
 
-    protected SuccessResponseMessage() {
-
+    public SuccessResponseMessage() {
+        this.success = true;
     }
 
     public SuccessResponseMessage(String message, String accountIdentifier) {
-        this.success = true;
+        this();
         this.message = message;
         this.accountIdentifier = accountIdentifier;
     }

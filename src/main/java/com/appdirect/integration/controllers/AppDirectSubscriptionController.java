@@ -29,16 +29,16 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @Controller
 @PreAuthorize("hasRole('ROLE_OAUTH')")
 @RequestMapping("/api/events/subscriptions")
-public class SubscriptionsAPIController {
+public class AppDirectSubscriptionController {
 
-    private static final Logger logger = LoggerFactory.getLogger(SubscriptionsAPIController.class);
+    private static final Logger logger = LoggerFactory.getLogger(AppDirectSubscriptionController.class);
     private EventDataRetrieverService eventDataRetrieverService;
     private CompanyService companyService;
     private UserService userService;
     private EventsService eventsService;
 
     @Autowired
-    public SubscriptionsAPIController(EventDataRetrieverService eventDataRetrieverService, CompanyService companyService, UserService userService, EventsService eventsService) {
+    public AppDirectSubscriptionController(EventDataRetrieverService eventDataRetrieverService, CompanyService companyService, UserService userService, EventsService eventsService) {
         this.eventDataRetrieverService = eventDataRetrieverService;
         this.companyService = companyService;
         this.userService = userService;

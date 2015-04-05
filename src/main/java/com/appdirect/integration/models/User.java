@@ -28,7 +28,7 @@ public class User extends AbstractModel<User> implements UserDetails {
     private String email;
 
     @ManyToOne
-    @JoinColumn(name = "company")
+    @JoinColumn(name = "companyId")
     private Company company;
     @Column
     @JsonIgnore

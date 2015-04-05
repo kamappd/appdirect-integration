@@ -53,4 +53,8 @@ public class CompanyService {
         company.setStatus(status);
         companyRepository.save(company);
     }
+
+    public Company getCompany(String identifier) {
+        return companyRepository.findOne(identifier);
+    }
 }

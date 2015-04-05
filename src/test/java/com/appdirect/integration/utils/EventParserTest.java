@@ -58,6 +58,16 @@ public class EventParserTest {
         verifyStatusSubscriptionOrderEvent(statusSubscriptionOrderEvent);
     }
 
+    @Test
+    public void can_parse_user_assignment_event() throws Exception {
+
+        ByteArrayInputStream input = aUserAssignmentEventInputStream();
+
+        UserAssignmentEvent userAssignmentEvent = eventParser.parse(input, UserAssignmentEvent.class);
+
+        verifyUserAssignmentEvent(userAssignmentEvent);
+    }
+
     private ByteArrayInputStream aCreateSubscriptionOrderEventInputStream() {
         return new ByteArrayInputStream(("" +
                 "<event>\n" +
@@ -152,7 +162,8 @@ public class EventParserTest {
     }
 
     private ByteArrayInputStream aStatusSubscriptionOrderEventInputStream() {
-        return new ByteArrayInputStream(("<event>\n" +
+        return new ByteArrayInputStream(("" +
+                "<event>\n" +
                 "    <type>SUBSCRIPTION_NOTICE</type>\n" +
                 "    <marketplace>\n" +
                 "        <partner>ACME</partner>\n" +
@@ -166,6 +177,34 @@ public class EventParserTest {
                 "        <notice>\n" +
                 "            <type>DEACTIVATED</type>\n" +
                 "        </notice>\n" +
+                "    </payload>\n" +
+                "</event>").getBytes());
+    }
+
+    private ByteArrayInputStream aUserAssignmentEventInputStream() {
+        return new ByteArrayInputStream(("" +
+                "<event>\n" +
+                "    <type>USER_ASSIGNMENT</type>\n" +
+                "    <marketplace>\n" +
+                "        <baseUrl>https://www.acme-marketplace.com</baseUrl>\n" +
+                "        <partner>ACME</partner>\n" +
+                "    </marketplace>\n" +
+                "    <creator>\n" +
+                "        <email>andysen@gmail.com</email>\n" +
+                "        <firstName>Andy</firstName>\n" +
+                "        <lastName>Sen</lastName>\n" +
+                "        <openId>https://www.acme-marketplace.com/openid/id/a11a7918-bb43-4429-a256-f6d729c71033</openId>\n" +
+                "    </creator>\n" +
+                "    <payload>\n" +
+                "        <account>\n" +
+                "            <accountIdentifier>accountXYZ</accountIdentifier>\n" +
+                "        </account>\n" +
+                "        <user>\n" +
+                "            <email>bob@fakeco</email>\n" +
+                "            <firstName>Bob</firstName>\n" +
+                "            <lastName>Bitdiddle</lastName>\n" +
+                "            <openId>https://www.acme-marketplace.com/openid/id/4a76c6c4-96e1-42a0-93e0-36af5fa374e8</openId>\n" +
+                "        </user>\n" +
                 "    </payload>\n" +
                 "</event>").getBytes());
     }
@@ -197,6 +236,13 @@ public class EventParserTest {
         verifyStatusSubscriptionOrderPayload(statusSubscriptionOrderEvent.getPayload());
     }
 
+    private void verifyUserAssignmentEvent(UserAssignmentEvent userAssignmentEvent) {
+        assertThat(userAssignmentEvent.getType(), is(USER_ASSIGNMENT));
+        verifyMarketPlace(userAssignmentEvent.getMarketplace());
+        verifyCreator(userAssignmentEvent.getCreator());
+        verifyUserAssigmentPayload(userAssignmentEvent.getPayload());
+    }
+
     private void verifyCreateSubscriptionOrderPayload(CreateSubscriptionOrderPayload payload) {
         verifyCompany(payload.getCompany());
         verifyOrder(payload.getOrder());
@@ -214,6 +260,10 @@ public class EventParserTest {
     private void verifyStatusSubscriptionOrderPayload(StatusSubscriptionOrderPayload payload) {
         assertThat(payload.getAccount(), is(anAccountWithStatus(FREE_TRIAL_EXPIRED)));
         assertThat(payload.getNotice(), is(aDefaultNotice()));
+    }
+
+    private void verifyUserAssigmentPayload(UserAssignmentPayload payload) {
+        verifyContact(payload.getUser(), "bob@fakeco", "Bob", "Bitdiddle","https://www.acme-marketplace.com/openid/id/4a76c6c4-96e1-42a0-93e0-36af5fa374e8");
     }
 
     private OrderItem anOrderItem(int quantity, OrderUnit unit) {
@@ -234,10 +284,14 @@ public class EventParserTest {
     }
 
     private void verifyCreator(Contact creator) {
-        assertThat(creator.getEmail(), is("andysen@gmail.com"));
-        assertThat(creator.getFirstName(), is("Andy"));
-        assertThat(creator.getLastName(), is("Sen"));
-        assertThat(creator.getOpenId(), is("https://www.acme-marketplace.com/openid/id/a11a7918-bb43-4429-a256-f6d729c71033"));
+        verifyContact(creator, "andysen@gmail.com", "Andy", "Sen", "https://www.acme-marketplace.com/openid/id/a11a7918-bb43-4429-a256-f6d729c71033");
+    }
+
+    private void verifyContact(Contact creator, String email, String firstname, String lastname, String openId) {
+        assertThat(creator.getEmail(), is(email));
+        assertThat(creator.getFirstName(), is(firstname));
+        assertThat(creator.getLastName(), is(lastname));
+        assertThat(creator.getOpenId(), is(openId));
     }
 
     private void verifyCompany(Company company) {
