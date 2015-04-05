@@ -22,7 +22,6 @@
     <http pattern="/**">
         <intercept-url pattern="/**" access="ROLE_USER"/>
         <openid-login login-processing-url="/login"
-                      user-service-ref="userService"
                       default-target-url="/main.html"
                       always-use-default-target="true">
             <!--<attribute-exchange>-->
