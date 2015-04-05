@@ -1,10 +1,9 @@
 package com.appdirect.integration.services;
 
+import com.appdirect.integration.models.Subscription;
+import com.appdirect.integration.models.events.CreateSubscriptionOrderEvent;
 import com.appdirect.integration.models.events.Event;
-import com.appdirect.integration.models.events.EventType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.Reactor;
@@ -19,17 +18,15 @@ import java.util.List;
 import static reactor.event.selector.Selectors.$;
 
 @Service
-public class SubscribersService implements Consumer<reactor.event.Event<Event>> {
+public class SubscriptionsService implements Consumer<reactor.event.Event<Event>> {
 
-    private static Logger logger = LoggerFactory.getLogger(SubscribersService.class);
-
-    private List<Event> subscribers = new ArrayList<>();
+    protected List<Subscription> subscriptions = new ArrayList<>();
     private File file;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private Reactor publisher;
 
     @Autowired
-    public SubscribersService(Reactor publisher) {
+    public SubscriptionsService(Reactor publisher) {
         this.publisher = publisher;
     }
 
@@ -42,11 +39,11 @@ public class SubscribersService implements Consumer<reactor.event.Event<Event>> 
     }
 
     private void loadSubscribers() {
-        file = new File("subscribers.json");
+        file = new File("subscriptions.json");
         if (file.exists()) {
             try (InputStream is = new FileInputStream(file)) {
                 ObjectMapper objectMapper = new ObjectMapper();
-                subscribers = objectMapper.readValue(is, List.class);
+                subscriptions = objectMapper.readValue(is, List.class);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -60,7 +57,7 @@ public class SubscribersService implements Consumer<reactor.event.Event<Event>> 
 
     private void saveEvents() {
         try (OutputStream is = new FileOutputStream(file)) {
-            objectMapper.writeValue(is, subscribers);
+            objectMapper.writeValue(is, subscriptions);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -69,16 +66,24 @@ public class SubscribersService implements Consumer<reactor.event.Event<Event>> 
     @Override
     public void accept(reactor.event.Event<Event> eventWrapper) {
         Event event = eventWrapper.getData();
-        if (event.getType() == EventType.SUBSCRIPTION_ORDER) {
-
-        } else if (event.getType() == EventType.SUBSCRIPTION_CANCEL) {
-            subscribers.add(event);
-        } else {
-            subscribers.remove(event);
+        switch (event.getType()) {
+            case SUBSCRIPTION_ORDER:
+                CreateSubscriptionOrderEvent createSubscriptionOrderEvent = (CreateSubscriptionOrderEvent)event;
+                Subscription subscription = new Subscription();
+                subscription.setId(createSubscriptionOrderEvent.getPayload().getCompany().getUuid());
+                subscription.setCompanyName(createSubscriptionOrderEvent.getPayload().getCompany().getName());
+                subscription.setOrder(createSubscriptionOrderEvent.getPayload().getOrder());
+                subscriptions.add(subscription);
+                break;
+            case SUBSCRIPTION_CANCEL:
+                subscriptions.remove(event);
+                break;
+            case SUBSCRIPTION_CHANGE:
+            default:
         }
     }
 
-    public List<Event> getSubscribers() {
-        return new ArrayList<>(this.subscribers);
+    public List<Subscription> getSubscriptions() {
+        return new ArrayList<>(this.subscriptions);
     }
 }

@@ -28,8 +28,8 @@
                 <td>Items</td>
             </tr>
             </thead>
-            <tr ng-repeat="subscriber in subscribers">
-                <td>{{subscriber.company.name}}</td>
+            <tr ng-repeat="subscription in subscriptions">
+                <td>{{subscription.companyName}}</td>
                 <td>{{subscriber.order.editionCode}}</td>
                 <td><span ng-if="$middle">, </span><span ng-repeat="item in subscriber.order.items">{{item.quantity}} {{item.unit}} </span>
                 </td>
@@ -43,6 +43,7 @@
         <h3 class="panel-title">Events</h3>
     </div>
     <div class="panel-body">
+        <div ng-repeat="event in events">{{event}}</div>
 
         <table class="table table-striped events-list">
             <thead>

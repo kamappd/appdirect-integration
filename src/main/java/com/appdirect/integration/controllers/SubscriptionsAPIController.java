@@ -1,6 +1,5 @@
 package com.appdirect.integration.controllers;
 
-import com.appdirect.integration.exceptions.SubscriptionOrderEventException;
 import com.appdirect.integration.models.ErrorResponseMessage;
 import com.appdirect.integration.models.ResponseMessage;
 import com.appdirect.integration.models.SuccessResponseMessage;
@@ -17,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,13 +33,14 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @Controller
 @PreAuthorize("hasRole('ROLE_OAUTH')")
 @RequestMapping("/api/events/subscriptions")
-public class SubscriptionController {
+public class SubscriptionsAPIController {
 
-    private static final Logger logger = LoggerFactory.getLogger(SubscriptionController.class);
+    private static final Logger logger = LoggerFactory.getLogger(SubscriptionsAPIController.class);
     private EventDataRetrieverService eventDataRetrieverService;
     private Reactor reactor;
+
     @Autowired
-    public SubscriptionController(EventDataRetrieverService eventDataRetrieverService, Reactor reactor) {
+    public SubscriptionsAPIController(EventDataRetrieverService eventDataRetrieverService, Reactor reactor) {
         this.eventDataRetrieverService = eventDataRetrieverService;
         this.reactor = reactor;
     }

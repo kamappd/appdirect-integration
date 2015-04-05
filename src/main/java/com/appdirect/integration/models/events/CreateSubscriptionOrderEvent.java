@@ -19,4 +19,14 @@ public class CreateSubscriptionOrderEvent extends Event<CreateSubscriptionOrderP
     public CreateSubscriptionOrderPayload getPayload() {
         return this.payload;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }
