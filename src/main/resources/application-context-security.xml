@@ -10,10 +10,32 @@
     <!-- Global Security Settings -->
     <global-method-security pre-post-annotations="enabled"/>
 
+    <http pattern="/css/**" security="none"/>
+    <http pattern="/javascript/**" security="none"/>
+
     <!-- OAuth 1.0 2-Legged Security -->
     <http pattern="/api/**" use-expressions="true" create-session="never"
           entry-point-ref="oauthProcessingFilterEntryPoint">
         <intercept-url pattern="/api/**" access="hasRole('ROLE_OAUTH')"/>
+    </http>
+
+    <http pattern="/**">
+        <intercept-url pattern="/**" access="hasRole('ROLE_USER')"/>
+        <openid-login login-processing-url="/login"
+                      default-target-url="/main.html"
+                      always-use-default-target="true">
+            <!--<attribute-exchange>-->
+                <!--<openid-attribute name="uuid" type="https://www.appdirect.com/schema/user/uuid" required="true"/>-->
+                <!--<openid-attribute name="email" type="http://axschema.org/contact/email" required="true"/>-->
+                <!--<openid-attribute name="firstname" type="http://axschema.org/namePerson/first" required="true"/>-->
+                <!--<openid-attribute name="lastname" type="http://axschema.org/namePerson/last" required="true"/>-->
+                <!--<openid-attribute name="fullname" type="http://axschema.org/namePerson" required="true"/>-->
+                <!--<openid-attribute name="language" type="http://axschema.org/pref/language" required="true"/>-->
+                <!--<openid-attribute name="companyUuid" type="https://www.appdirect.com/schema/company/uuid" required="true"/>-->
+                <!--<openid-attribute name="companyName" type="http://axschema.org/company/name" required="true"/>-->
+                <!--<openid-attribute name="position" type="http://axschema.org/company/title" required="true"/>-->
+            <!--</attribute-exchange>-->
+        </openid-login>
     </http>
 
     <authentication-manager alias="authenticationManager"/>
