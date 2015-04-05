@@ -6,6 +6,7 @@ import com.appdirect.integration.models.SubscriptionStatus;
 import com.appdirect.integration.repositories.CompanyRepository;
 import com.appdirect.integration.utils.IdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,7 +42,10 @@ public class CompanyService {
     }
 
     public void delete(String identifier) {
-        companyRepository.delete(identifier);
+        try {
+            companyRepository.delete(identifier);
+        } catch(EmptyResultDataAccessException ignored) {
+        }
     }
 
     public void changeStatus(String identifier, SubscriptionStatus status) {
