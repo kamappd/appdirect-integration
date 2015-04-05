@@ -16,7 +16,7 @@
     <http use-expressions="true" create-session="never"
           entry-point-ref="entryPoint">
         <intercept-url pattern="/api/**" access="hasRole('ROLE_OAUTH')"/>
-        <intercept-url pattern="/**" access="ROLE_USER"/>
+        <intercept-url pattern="/**" access="hasRole('ROLE_USER')"/>
 
         <openid-login login-processing-url="/login-openid"
                       default-target-url="/main.html"
