@@ -4,6 +4,9 @@ import com.appdirect.integration.models.User;
 import com.appdirect.integration.repositories.UserRepository;
 import com.appdirect.integration.utils.IdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,7 +14,7 @@ import java.util.List;
 import static com.google.common.collect.Lists.newArrayList;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     private UserRepository userRepository;
     private IdGenerator idGenerator;
 
@@ -29,5 +32,10 @@ public class UserService {
 
     public List<User> getUsers() {
         return newArrayList(userRepository.findAll());
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username);
     }
 }
