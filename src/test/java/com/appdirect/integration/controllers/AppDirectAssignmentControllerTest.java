@@ -6,7 +6,6 @@ import com.appdirect.integration.models.User;
 import com.appdirect.integration.models.events.*;
 import com.appdirect.integration.services.CompanyService;
 import com.appdirect.integration.services.EventDataRetrieverService;
-import com.appdirect.integration.services.EventsService;
 import com.appdirect.integration.services.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,8 +33,6 @@ public class AppDirectAssignmentControllerTest {
     private CompanyService companyService;
     @Mock
     private UserService userService;
-    @Mock
-    private EventsService eventsService;
 
     @Test
     public void can_handle_user_assignment_event() throws Exception {
@@ -52,7 +49,6 @@ public class AppDirectAssignmentControllerTest {
         // Verify
         assertThat(responseMessage.isSuccess(), is(true));
         verifyUserSaved();
-        verify(eventsService).saveEvent(userAssignmentEvent);
     }
 
     @Test
@@ -71,7 +67,6 @@ public class AppDirectAssignmentControllerTest {
         assertThat(responseMessage.isSuccess(), is(true));
 
         verify(userService).deleteByOpenId("123456789");
-        verify(eventsService).saveEvent(accountId);
     }
 
     private UserAssignmentEvent aBasicUserAssignmentEvent(String accountId, String openId) {

@@ -6,7 +6,6 @@ import com.appdirect.integration.models.User;
 import com.appdirect.integration.models.events.*;
 import com.appdirect.integration.services.CompanyService;
 import com.appdirect.integration.services.EventDataRetrieverService;
-import com.appdirect.integration.services.EventsService;
 import com.appdirect.integration.services.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,8 +37,6 @@ public class AppDirectSubscriptionControllerTest {
     private CompanyService companyService;
     @Mock
     private UserService userService;
-    @Mock
-    private EventsService eventsService;
 
     @Test
     public void can_handle_create_order_subscription_event() throws Exception {
@@ -55,7 +52,6 @@ public class AppDirectSubscriptionControllerTest {
         assertThat(responseMessage.isSuccess(), is(true));
         Company company = verifyCompanySaved();
         verifyUserSaved(company);
-        verify(eventsService).saveEvent(createSubscriptionOrderEvent);
     }
 
     @Test
@@ -71,7 +67,6 @@ public class AppDirectSubscriptionControllerTest {
         // Verify
         assertThat(responseMessage.isSuccess(), is(true));
         verify(companyService).delete("1234");
-        verify(eventsService).saveEvent(cancelSubscriptionOrderEvent);
     }
 
     @Test
@@ -87,7 +82,6 @@ public class AppDirectSubscriptionControllerTest {
         // Verify
         assertThat(responseMessage.isSuccess(), is(true));
         verify(companyService).updateEdition("1234", PREMIUM);
-        verify(eventsService).saveEvent(changeSubscriptionOrderEvent);
     }
 
     @Test
@@ -103,7 +97,6 @@ public class AppDirectSubscriptionControllerTest {
         // Verify
         assertThat(responseMessage.isSuccess(), is(true));
         verify(companyService).changeStatus("1234", DEACTIVATED);
-        verify(eventsService).saveEvent(statusSubscriptionOrderEvent);
     }
 
     private ChangeSubscriptionOrderEvent aBasicChangeSubscriptionOrderEvent(String accountIdentifier) {

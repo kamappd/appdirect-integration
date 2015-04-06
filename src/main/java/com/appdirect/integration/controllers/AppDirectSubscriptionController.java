@@ -5,7 +5,6 @@ import com.appdirect.integration.models.*;
 import com.appdirect.integration.models.events.*;
 import com.appdirect.integration.services.CompanyService;
 import com.appdirect.integration.services.EventDataRetrieverService;
-import com.appdirect.integration.services.EventsService;
 import com.appdirect.integration.services.UserService;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
@@ -32,14 +31,12 @@ public class AppDirectSubscriptionController {
     private EventDataRetrieverService eventDataRetrieverService;
     private CompanyService companyService;
     private UserService userService;
-    private EventsService eventsService;
 
     @Autowired
-    public AppDirectSubscriptionController(EventDataRetrieverService eventDataRetrieverService, CompanyService companyService, UserService userService, EventsService eventsService) {
+    public AppDirectSubscriptionController(EventDataRetrieverService eventDataRetrieverService, CompanyService companyService, UserService userService) {
         this.eventDataRetrieverService = eventDataRetrieverService;
         this.companyService = companyService;
         this.userService = userService;
-        this.eventsService = eventsService;
     }
 
     @RequestMapping(value = "/create", method = GET, produces = APPLICATION_XML_VALUE)
@@ -51,7 +48,6 @@ public class AppDirectSubscriptionController {
         User user = createUser(eventData.getCreator(), company);
         String accountIdentifier = companyService.save(company);
         userService.save(user);
-        eventsService.saveEvent(eventData);
         return new SuccessResponseMessage(accountIdentifier);
     }
 
@@ -63,7 +59,6 @@ public class AppDirectSubscriptionController {
         String accountIdentifier = eventData.getPayload().getAccount().getAccountIdentifier();
         EditionCode editionCode = eventData.getPayload().getOrder().getEditionCode();
         companyService.updateEdition(accountIdentifier, editionCode);
-        eventsService.saveEvent(eventData);
         return new SuccessResponseMessage(accountIdentifier);
     }
 
@@ -74,7 +69,6 @@ public class AppDirectSubscriptionController {
 
         String accountIdentifier = eventData.getPayload().getAccount().getAccountIdentifier();
         companyService.delete(accountIdentifier);
-        eventsService.saveEvent(eventData);
         return new SuccessResponseMessage();
     }
 
@@ -87,7 +81,6 @@ public class AppDirectSubscriptionController {
         SubscriptionStatus subscriptionStatus = SubscriptionStatus.valueOf(eventData.getPayload().getNotice().getType().name());
 
         companyService.changeStatus(accountIdentifier, subscriptionStatus);
-        eventsService.saveEvent(eventData);
         return new SuccessResponseMessage(accountIdentifier);
     }
 

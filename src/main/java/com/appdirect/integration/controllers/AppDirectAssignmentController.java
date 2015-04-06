@@ -9,7 +9,6 @@ import com.appdirect.integration.models.events.UserAssignmentEvent;
 import com.appdirect.integration.models.events.UserUnassignmentEvent;
 import com.appdirect.integration.services.CompanyService;
 import com.appdirect.integration.services.EventDataRetrieverService;
-import com.appdirect.integration.services.EventsService;
 import com.appdirect.integration.services.UserService;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
@@ -36,14 +35,12 @@ public class AppDirectAssignmentController {
     private EventDataRetrieverService eventDataRetrieverService;
     private CompanyService companyService;
     private UserService userService;
-    private EventsService eventsService;
 
     @Autowired
-    public AppDirectAssignmentController(EventDataRetrieverService eventDataRetrieverService, CompanyService companyService, UserService userService, EventsService eventsService) {
+    public AppDirectAssignmentController(EventDataRetrieverService eventDataRetrieverService, CompanyService companyService, UserService userService) {
         this.eventDataRetrieverService = eventDataRetrieverService;
         this.companyService = companyService;
         this.userService = userService;
-        this.eventsService = eventsService;
     }
 
     @RequestMapping(value = "/assign", method = GET, produces = APPLICATION_XML_VALUE)
@@ -55,7 +52,6 @@ public class AppDirectAssignmentController {
         Company company = companyService.getCompany(accountIdentifier);
         User user = createUser(eventData.getPayload().getUser(), company);
         userService.save(user);
-        eventsService.saveEvent(eventData);
         return new SuccessResponseMessage();
     }
 
@@ -66,7 +62,6 @@ public class AppDirectAssignmentController {
 
         String userOpenId = eventData.getPayload().getUser().getOpenId();
         userService.deleteByOpenId(userOpenId);
-        eventsService.saveEvent(eventData);
         return new SuccessResponseMessage();
     }
 
