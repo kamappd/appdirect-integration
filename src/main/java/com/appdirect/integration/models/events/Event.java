@@ -1,40 +1,14 @@
 package com.appdirect.integration.models.events;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
-import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import static com.fasterxml.jackson.annotation.JsonTypeInfo.As;
-import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
-
 @XmlTransient
-@JsonTypeInfo(use = Id.CLASS, include = As.PROPERTY, property = "class")
-@Entity
-@Table(name = "event", schema = "public")
-@Inheritance(strategy= InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(
-        name="eventType",
-        discriminatorType= DiscriminatorType.STRING
-)
 public abstract class Event<T> {
-    @javax.persistence.Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
     private EventType type;
     private MarketPlace marketplace;
     private Contact creator;
     protected T payload;
-
-    @XmlElement
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     @XmlElement
     public EventType getType() {
