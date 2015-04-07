@@ -18,3 +18,6 @@ heroku logs --tail
 ```
 mvn clean package -Pwar
 ```
+
+# Mandatory properties
+`DATABASE_URL`: The postgresql database URL in the the following format: postgres://<username>:<password>@<host>/<dbname>
