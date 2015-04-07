@@ -20,4 +20,4 @@ mvn clean package -Pwar
 ```
 
 # Mandatory properties
-`DATABASE_URL`: The postgresql database URL in the the following format: postgres://&lt;username&gt;:&lt;password&gt;@&lt;host&gt;/&lt;dbname&gt;
+`DATABASE_URL`: The postgresql database URL in the the following format: `postgres://<username>:<password>@<host>/<dbname>`
